@@ -1,4 +1,7 @@
 package enums;
 
-public class Role {
+public enum Role {
+    GUEST,
+    RECEPTIONIST,
+    ADMIN
 }
