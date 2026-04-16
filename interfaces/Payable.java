@@ -1,4 +1,5 @@
 package interfaces;
 
-public class Payable {
+public interface Payable {
+    public void pay(double amount);
 }
