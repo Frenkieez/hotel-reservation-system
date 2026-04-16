@@ -1,5 +1,7 @@
 package model;
 
+import enums.Role;
+
 // Staff class that serves as a base class for Admin and Receptionist
 public abstract class Staff {
     // Common attributes for all staff members
@@ -7,14 +9,24 @@ public abstract class Staff {
     private String password;
     private String dateOfBirth;
     private int workingHours;
+    //Role enum
+    private Role role;
     // Constructor for Staff
-    public Staff(String username, String password, String dateOfBirth, int workingHours) {
+    public Staff(String username, String password, String dateOfBirth, int workingHours, Role role) {
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.workingHours = workingHours;
+        this.role = role;
     }
     // Getters and setters for Staff attributes
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    
     public String getUsername() {
         return username;
     }
