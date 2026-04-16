@@ -1,10 +1,10 @@
 package model;
-
+import enums.Role;
 // Receptionist class that extends Staff
 public class Receptionist extends Staff {
     // Constructor for Receptionist
     public Receptionist(String username, String password, String dateOfBirth, int workingHours) {
-        super(username, password, dateOfBirth, workingHours);
+        super(username, password, dateOfBirth, workingHours, Role.RECEPTIONIST);
     }
     // Override the performActions method to provide receptionist-specific functionality
     @Override
