@@ -1,5 +1,6 @@
 package model;
 
+import database.HotelDatabase;
 import enums.Role;
 
 // Staff class that serves as a base class for Admin and Receptionist
@@ -85,11 +86,27 @@ public abstract class Staff {
     public void ViewRoom(){
         // code to view room information
         System.out.println("Viewing room information...");
+        for (int i = 0; i < HotelDatabase.rooms.size(); i++) {
+        Room r = HotelDatabase.rooms.get(i);
+        //getRoomNumber and getRoomType are methods in the Room class that will be implemented when the class is finished
+        System.out.println("Room Number: " + r.getRoomNumber());
+        System.out.println("Room Type: " + r.getRoomType());
+    }
     }
     // Method to view booking information
     public void ViewBooking(){
         // code to view booking information
         System.out.println("Viewing booking information...");
+        for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
+        Reservation res = HotelDatabase.reservations.get(i);
+
+        //getGuest, getUsername, getRoom, getRoomNumber, getStatus are all methods in the other classes that will be implemented when the classes are finished
+        System.out.println("Guest: " + res.getGuest().getUsername());
+        System.out.println("Room: " + res.getRoom().getRoomNumber());
+        System.out.println("Status: " + res.getStatus());
+        System.out.println("-------------------");
+    }
+
     }
     // Abstract method to be implemented by subclasses for specific actions
     public abstract void performActions();
