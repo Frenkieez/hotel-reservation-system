@@ -30,12 +30,32 @@ public class Admin extends Staff implements Manageable {
     }
     // Method to update room information
     @Override
-    public void updateRoom(Room room){
-        System.out.println("Updating room information...");
+    public void updateRoom(int roomNumber, double newPrice) {
+    for (int i = 0; i < HotelDatabase.rooms.size(); i++) {
+        Room r = HotelDatabase.rooms.get(i);
+        //getRoomNumber and setPrice are methods in the other classes that will be implemented when the classes are finished
+        if (r.getRoomNumber() == roomNumber) {
+            r.setPrice(newPrice);
+            System.out.println("Room updated");
+            return;
+        }
     }
+
+    System.out.println("Room not found");
+}
     // Method to read room information
-    public void readRoom(){
-        System.out.println("Reading room information...");
+    public void readRoom(int roomNumber) {
+    for (int i = 0; i < HotelDatabase.rooms.size(); i++) {
+        Room r = HotelDatabase.rooms.get(i);
+        //getRoomNumber and getPrice are methods in the other classes that will be implemented when the classes are finished
+        if (r.getRoomNumber() == roomNumber) {
+            System.out.println("Room Number: " + r.getRoomNumber());
+            System.out.println("Price: " + r.getPrice());
+            return;
+        }
     }
+
+    System.out.println("Room not found");
+}
 
 }
