@@ -1,12 +1,12 @@
 package model;
-
+import enums.Role;
 import database.HotelDatabase;
 
 // Admin class that extends Staff
 public class Admin extends Staff {
     // Constructor for Admin
     public Admin(String username, String password, String dateOfBirth, int workingHours) {
-        super(username, password, dateOfBirth, workingHours);
+        super(username, password, dateOfBirth, workingHours, Role.ADMIN);
     }
 // Override the performActions method to provide admin-specific functionality
     @Override
