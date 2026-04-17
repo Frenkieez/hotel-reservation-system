@@ -81,6 +81,13 @@ public abstract class Staff {
     public void ViewGuest(){
         // code to view guest information
         System.out.println("Viewing guest information...");
+        for(int i =0; i < HotelDatabase.guests.size(); i++){
+            guest g = HotelDatabase.guests.get(i);
+            System.out.println("Username: " + g.getUsername());
+            System.out.println("Balance: " + g.getBalance());
+            System.out.println("Address: " + g.getAddress());
+            System.out.println("Gender: " + g.getGender());
+        }
     }
     // Method to view room information
     public void ViewRoom(){
