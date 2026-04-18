@@ -1,7 +1,13 @@
 package model;
 
 // imports
+import database.HotelDatabase;
 import enums.Gender;
+import exceptions.InvalidLoginException;
+import exceptions.InvalidReservationException;
+import exceptions.InvalidResgistrationException;
+import exceptions.RoomNotAvailableException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +45,69 @@ public class Guest {
 //        this.gender = gender;
     }
 
+
+    // methods :
+    public void register(String username, String password) throws InvalidResgistrationException {
+        if (username == null || username.isEmpty()){ // validates username
+            throw new InvalidResgistrationException("Username MUST not be empty");
+        }
+        for (Guest guest : HotelDatabase.guests) {
+            if (guest.getUsername().equals(username)) { // checking here for duplicate usernames
+                throw new InvalidResgistrationException("Username already exists");
+            }
+        }
+        if (password == null || password.length() < 6){ // validates password
+            throw new InvalidResgistrationException("Password MUST be at least 6 characters");
+        }
+
+        // if all previous tests are passed successfully, the user registers
+        setUsername(username);
+        setPassword(password);
+        // adding to database:
+        HotelDatabase.guests.add(this);
+    }
+
+    public void login(String username, String password) throws InvalidLoginException{
+        if (username == null || password == null){ // validating username, password are not empty
+            throw new InvalidLoginException("Username or password cannot be null");
+        }
+
+        if (! (this.username.equals(username)) ){ // validating correct username
+            throw new InvalidLoginException("Username is not found");
+        }
+
+        if ( !(this.password.equals(password)) ){ // validating correct password
+            throw new InvalidLoginException("Password is incorrect");
+        }
+
+        // if all previous tests are passed successfully, user has logged in
+    }
+
+    public Reservation makeReservation(Room room, LocalDate CheckIn, LocalDate CheckOut) throws RoomNotAvailableException, InvalidReservationException{
+        if ( !(room.isAvailable(CheckIn, CheckOut)) ){ // if room is not available
+            throw new RoomNotAvailableException("Room is not available for the selected days");
+        }
+        // if available, create new reservation
+        Reservation reservation = new Reservation(this, room, CheckIn, CheckOut);
+
+        // storing the new reservation in reservations list (local one)
+        reservations.add(reservation);
+        // then add to database
+        HotelDatabase.reservations.add(reservation);
+
+
+        return reservation;
+    }
+
+    // viewReservations method :
+    public List<Reservation> viewReservations() {
+        return reservations;
+    }
+
+
+    // na'es cancelReservation(), payInvoice()
+
+
     // setters
     void setUsername(String username) {
         if (username == null || username.isBlank()) return; // validation
@@ -46,7 +115,7 @@ public class Guest {
     }
 
     void setPassword(String password){
-        if (password == null || password.length() < 4) return; // validation
+        if (password == null || password.length() < 6) return; // validation
         this.password = password;
     }
 
