@@ -2,6 +2,7 @@ package model;
 
 // imports
 import enums.ReservationStatus;
+import exceptions.InvalidDateException;
 import exceptions.InvalidReservationException;
 import java.time.LocalDate;
 
@@ -34,7 +35,7 @@ public class Reservation {
     }
 
     // calculations
-    public double calculateTotal(Room room) throws InvalidReservationException {
+    public double calculateTotal() throws InvalidReservationException, InvalidDateException {
         if (room == null) {
             throw new InvalidReservationException("Error, room must NOT be null");
         }
@@ -45,14 +46,20 @@ public class Reservation {
     /*
    pending then either (confirmed/canceled) then completed (in case confirmed)
    */
-    public void confirm() {
+
+    public void confirm() throws InvalidDateException {
         if (status != ReservationStatus.PENDING) return; // because we only can confirm the pending (waiting) reservation
+        if (! (room.isAvailable(checkIn, checkOut)) ) {return;} // if room is not available return
         status = ReservationStatus.CONFIRMED;
+        room.setAvailable(false); // after confirming a reservation, the room becomes NOT available for any other reservations
     }
+
     public void cancel() {
         if (status == ReservationStatus.COMPLETED) return; // if reservation is complete we cannot cancel it
         status = ReservationStatus.CANCELLED;
+        room.setAvailable(true); // after cancelling the reservation, the room becomes empty for any new reservations
     }
+
     public void complete() {
         if (status != ReservationStatus.CONFIRMED) return; // bec only confirmed reservations can be completed
         status = ReservationStatus.COMPLETED;
@@ -76,17 +83,3 @@ public class Reservation {
         return status;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
