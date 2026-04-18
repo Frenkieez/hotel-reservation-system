@@ -1,16 +1,16 @@
-/******* THIS IS JUST A PROTOTYPE VERSION FOR THE AMENITY CLASS TILL MEMBER 2 STARTS IN IMPLEMENTING THE REAL ONE *******/
-
+// member2's version
 
 package model;
 
 public class Amenity {
-
     private String name;
 
+    // Constructor
     public Amenity(String name) {
         this.name = name;
     }
 
+    // Getter
     public String getName() {
         return name;
     }
