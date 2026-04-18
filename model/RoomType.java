@@ -6,12 +6,9 @@ package model;
 public class RoomType {
 
     private String name;
+    private double pricePerNight;
 
-    public RoomType(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public double getPricePerNight() {
+        return pricePerNight;
     }
 }

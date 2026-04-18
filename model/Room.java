@@ -2,27 +2,34 @@
 
 package model;
 
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 public class Room {
 
     private int roomNumber;
-    private double pricePerNight;
     private RoomType type;
+    private List<Amenity> amenities;
+    private boolean isAvailable = true;
 
-    public Room(int roomNumber, double pricePerNight, RoomType type) {
-        this.roomNumber = roomNumber;
-        this.pricePerNight = pricePerNight;
-        this.type = type;
+    public boolean isAvailable(LocalDate in, LocalDate out) {
+        return isAvailable;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public double calculatePrice(LocalDate in, LocalDate out) {
+        long days = ChronoUnit.DAYS.between(in, out);
+
+        double base = type.getPricePerNight();
+        double amenitiesCost = amenities.size() * 10; // simple rule
+
+        return (base + amenitiesCost) * days;
     }
 
-    public double getPricePerNight() {
-        return pricePerNight;
+    public void setAvailable(boolean status) {
+        this.isAvailable = status;
     }
 
-    public RoomType getType() {
-        return type;
-    }
+    public int getRoomNumber() { return roomNumber; }
 }
