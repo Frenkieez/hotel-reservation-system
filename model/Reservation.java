@@ -34,16 +34,12 @@ public class Reservation {
 
     }
 
-    // calculations logics
+    // calculations
     public double calculateTotal(Room room){
         if (room == null) {
             throw new InvalidReservationException("Error, room must NOT be null");
         }
-        long days = ChronoUnit.DAYS.between(checkIn, checkOut); // returns a long that has the number of days wanted to reserve
-        if (days < 0){
-            throw new InvalidReservationException("Error, number of days must be a positive integer");
-        }
-        return days * room.getPricePerNight(); // price * n days = total
+        return room.calculatePrice(checkIn, checkOut); // removed logic of calculations because it is part of RoomType class
     }
 
     // Status cycle
