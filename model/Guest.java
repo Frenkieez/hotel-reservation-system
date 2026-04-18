@@ -3,10 +3,7 @@ package model;
 // imports
 import database.HotelDatabase;
 import enums.Gender;
-import exceptions.InvalidLoginException;
-import exceptions.InvalidReservationException;
-import exceptions.InvalidResgistrationException;
-import exceptions.RoomNotAvailableException;
+import exceptions.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -83,7 +80,8 @@ public class Guest {
         // if all previous tests are passed successfully, user has logged in
     }
 
-    public Reservation makeReservation(Room room, LocalDate CheckIn, LocalDate CheckOut) throws RoomNotAvailableException, InvalidReservationException{
+    public Reservation makeReservation(Room room, LocalDate CheckIn, LocalDate CheckOut)
+            throws RoomNotAvailableException, InvalidReservationException, InvalidDateException {
         if ( !(room.isAvailable(CheckIn, CheckOut)) ){ // if room is not available
             throw new RoomNotAvailableException("Room is not available for the selected days");
         }
@@ -104,9 +102,36 @@ public class Guest {
         return reservations;
     }
 
+    public void cancelReservation(Reservation reservation) throws InvalidReservationException{
+        if (! (reservations.contains(reservation)) ){ // guest can ONLY cancel their own reservations
+            throw new InvalidReservationException("You have NO access to cancel this reservation");
+        }
+    }
 
-    // na'es cancelReservation(), payInvoice()
 
+
+    /* temporary payInvoice class !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    public void payInvoice(Invoice invoice, double amount)
+        throws InvalidPaymentException {
+
+    // 1. Validate invoice
+    if (invoice == null) {
+        throw new InvalidPaymentException("Invoice is invalid");
+    }
+
+    // 2. Check balance
+    if (balance < amount) {
+        throw new InvalidPaymentException("Insufficient balance");
+    }
+
+    // 3. Deduct balance
+    balance -= amount;
+
+    // 4. Process payment
+    invoice.pay(amount);
+}
+*/
 
     // setters
     void setUsername(String username) {
