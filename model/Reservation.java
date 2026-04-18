@@ -4,7 +4,6 @@ package model;
 import enums.ReservationStatus;
 import exceptions.InvalidReservationException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 
 // the class
@@ -18,7 +17,7 @@ public class Reservation {
     private ReservationStatus status;
 
     // constructors
-    public Reservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut){
+    public Reservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut) throws InvalidReservationException{
 
     if (guest == null || room == null || checkIn == null || checkOut == null ){
         throw new InvalidReservationException("Reservation fields cannot be null!");
@@ -35,7 +34,7 @@ public class Reservation {
     }
 
     // calculations
-    public double calculateTotal(Room room){
+    public double calculateTotal(Room room) throws InvalidReservationException {
         if (room == null) {
             throw new InvalidReservationException("Error, room must NOT be null");
         }
