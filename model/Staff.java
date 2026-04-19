@@ -78,9 +78,8 @@ public abstract class Staff {
         
     }
     // Method to view guest information
-    public void ViewGuest(){
+    public void viewGuest(){
         // code to view guest information
-        System.out.println("Viewing guest information...");
         for(int i =0; i < HotelDatabase.guests.size(); i++){
             guest g = HotelDatabase.guests.get(i);
             System.out.println("Username: " + g.getUsername());
@@ -90,9 +89,8 @@ public abstract class Staff {
         }
     }
     // Method to view room information
-    public void ViewRoom(){
+    public void viewRoom(){
         // code to view room information
-        System.out.println("Viewing room information...");
         for (int i = 0; i < HotelDatabase.rooms.size(); i++) {
         Room r = HotelDatabase.rooms.get(i);
         //getRoomNumber and getRoomType are methods in the Room class that will be implemented when the class is finished
@@ -101,9 +99,8 @@ public abstract class Staff {
     }
     }
     // Method to view booking information
-    public void ViewBooking(){
+    public void viewBooking(){
         // code to view booking information
-        System.out.println("Viewing booking information...");
         for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
         Reservation res = HotelDatabase.reservations.get(i);
 
