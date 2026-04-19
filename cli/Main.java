@@ -1,19 +1,17 @@
-// Imports
+package cli;// Imports
 import database.HotelDatabase;
 import exceptions.InvalidInputException;
 import exceptions.InvalidPriceException;
 import exceptions.InvalidReservationException;
-import model.*;
-import enums.*;
 
-import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
-
 public class Main {
     // helper functions
+
+    // function that ensures an integer is input
     public static int readInt(Scanner scanner) throws InvalidInputException {
         try {
             return scanner.nextInt();
