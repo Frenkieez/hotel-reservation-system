@@ -51,13 +51,13 @@ public class Reservation {
         if (status != ReservationStatus.PENDING) return; // because we only can confirm the pending (waiting) reservation
         if (! (room.isAvailable(checkIn, checkOut)) ) {return;} // if room is not available return
         status = ReservationStatus.CONFIRMED;
-        room.setAvailable(false); // after confirming a reservation, the room becomes NOT available for any other reservations
+        // removed the setAvailable(false); because we now are using the date based one
     }
 
     public void cancel() {
         if (status == ReservationStatus.COMPLETED) return; // if reservation is complete we cannot cancel it
         status = ReservationStatus.CANCELLED;
-        room.setAvailable(true); // after cancelling the reservation, the room becomes empty for any new reservations
+        // removed the setAvailable(true); because we are now using the data based one
     }
 
     public void complete() {

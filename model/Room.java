@@ -1,6 +1,8 @@
 // member2's version
 
 package model;
+import database.HotelDatabase;
+import enums.ReservationStatus;
 import exceptions.InvalidDateException;
 
 import java.time.LocalDate;
@@ -12,7 +14,7 @@ public class Room {
     private int roomNumber;
     private RoomType type;
     private ArrayList<Amenity> amenities;
-    private boolean isAvailable;
+//    private boolean isAvailable;
 
     // Constructor
     public Room(int roomNumber, RoomType type) {
@@ -23,11 +25,21 @@ public class Room {
     }
 
     // Check availability
-    public boolean isAvailable(LocalDate in, LocalDate out) throws InvalidDateException {
-        if (in.isAfter(out) || in.isEqual(out)) {
-            throw new InvalidDateException("Check-out date must be after check-in date.");
+    public boolean isAvailable(LocalDate newIn, LocalDate newOut) throws InvalidDateException {
+        for (Reservation r : HotelDatabase.reservations){
+               // if room = this room and status of this room is confirmed :
+            if (r.getRoom() == this && r.getStatus() == ReservationStatus.CONFIRMED){
+                // checking if there is overlapping in availability
+                // if NOT [new_checkOut is before current checkIn OR new_checkIn is after current checkOut] (not correct way of reservation)
+                if (! (newOut.isBefore(r.getCheckIn()) || newIn.isAfter(r.getCheckOut())) ){
+                    return false;
+                }
+
+
+            }
+
         }
-        return isAvailable;
+        return true; // if all these are not wrong, room is available now
     }
 
     // Calculate price
