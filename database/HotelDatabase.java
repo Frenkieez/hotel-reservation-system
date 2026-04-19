@@ -1,5 +1,7 @@
 package database;
 
+import exceptions.InvalidPriceException;
+import exceptions.InvalidReservationException;
 import model.*;
 import enums.*;
 
@@ -16,7 +18,7 @@ public class HotelDatabase {
 
     public static List<Staff> staffMembers = new ArrayList<>();
 
-    public static void initializeData() {
+    public static void initializeData() throws InvalidReservationException, InvalidPriceException {
 
         // ---------- ROOM TYPES ----------
         RoomType single = new RoomType("Single", 100);
@@ -31,8 +33,8 @@ public class HotelDatabase {
         basicAmenities.add(tv);
 
         // ---------- ROOMS ----------
-        Room room1 = new Room(101, single, basicAmenities, true);
-        Room room2 = new Room(102, doubleRoom, basicAmenities, true);
+        Room room1 = new Room(101, single);
+        Room room2 = new Room(102, doubleRoom);
 
         rooms.add(room1);
         rooms.add(room2);
