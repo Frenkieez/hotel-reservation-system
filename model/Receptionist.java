@@ -35,7 +35,7 @@ public class Receptionist extends Staff {
         }
     }
 
-    System.out.println("Reservation not found");
+    //System.out.println("Reservation not found");
 }
 
     // Method to check out a guest
@@ -65,7 +65,7 @@ public class Receptionist extends Staff {
         }
     }
 
-    System.out.println("Reservation not found");
+    //System.out.println("Reservation not found");
 }
 
 }
