@@ -21,7 +21,7 @@ public class Room {
         this.roomNumber = roomNumber;
         this.type = type;
         this.amenities = new ArrayList<>();
-        this.isAvailable = true;
+//        this.isAvailable = true;
     }
 
     // Check availability
@@ -57,9 +57,9 @@ public class Room {
     }
 
     // Set availability
-    public void setAvailable(boolean status) {
-        this.isAvailable = status;
-    }
+//    public void setAvailable(boolean status) {
+//        this.isAvailable = status;
+//    }
 
     // Getters
     public int getRoomNumber() {
@@ -70,9 +70,9 @@ public class Room {
         return type;
     }
 
-    public boolean getAvailability() {
-        return isAvailable;
-    }
+//    public boolean getAvailability() {
+//        return isAvailable;
+//    }
 
     public ArrayList<Amenity> getAmenities() {
         return amenities;
