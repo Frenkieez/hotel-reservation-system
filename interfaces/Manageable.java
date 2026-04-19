@@ -3,8 +3,22 @@ import model.Room;
 
 
 public interface Manageable {
-    public void addRoom(Room room);
-    public void updateRoom(Room room);
-    public void deleteRoom(Room room); 
-} 
 
+    // ===== ROOMS =====
+    void addRoom(Room room);
+    void viewRooms();
+    void updateRoom(int roomNumber, double newPrice);
+    void deleteRoom(int roomNumber);
+
+    // ===== AMENITIES =====
+    void addAmenity(Amenity a);
+    void viewAmenities();
+    void updateAmenity(String oldName, String newName);
+    void deleteAmenity(String name);
+
+    // ===== ROOM TYPES =====
+    void addRoomType(RoomType t);
+    void viewRoomTypes();
+    void updateRoomType(String oldName, String newName);
+    void deleteRoomType(String name);
+}
