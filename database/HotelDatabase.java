@@ -15,6 +15,8 @@ public class HotelDatabase {
     public static List<Room> rooms = new ArrayList<>();
     public static List<Reservation> reservations = new ArrayList<>();
     public static List<Invoice> invoices = new ArrayList<>();
+    public static List<Amenity> amenities = new ArrayList<>();                                                          // edited by 3elba (+next line)
+    public static List<RoomType> roomTypes = new ArrayList<>();
 
     public static List<Staff> staffMembers = new ArrayList<>();
 
@@ -24,17 +26,27 @@ public class HotelDatabase {
         RoomType single = new RoomType("Single", 100);
         RoomType doubleRoom = new RoomType("Double", 180);
 
+        roomTypes.add(single);                                                                                          // edited by 3elba(+next line)
+        roomTypes.add(doubleRoom);
+
         // ---------- AMENITIES ----------
         Amenity wifi = new Amenity("WiFi");
         Amenity tv = new Amenity("TV");
 
-        List<Amenity> basicAmenities = new ArrayList<>();
-        basicAmenities.add(wifi);
-        basicAmenities.add(tv);
+        amenities.add(wifi);                                                                                            // edited by 3elba(+next line)
+        amenities.add(tv);
 
         // ---------- ROOMS ----------
         Room room1 = new Room(101, single);
         Room room2 = new Room(102, doubleRoom);
+
+        // attach amenities to rooms                                                                                    // edited by 3elba
+        room1.getAmenities().add(new Amenity("WiFi"));
+        room1.getAmenities().add(new Amenity("TV"));
+
+        room2.getAmenities().add(new Amenity("WiFi"));
+        room2.getAmenities().add(new Amenity("TV"));
+
 
         rooms.add(room1);
         rooms.add(room2);
@@ -53,18 +65,18 @@ public class HotelDatabase {
 
         reservations.add(r1);
 
-        // ---------- INVOICES ----------
-        Invoice inv1 = new Invoice(r1);
-        inv1.generateInvoice();
-
-        invoices.add(inv1);
+//        // ---------- INVOICES ----------
+//        Invoice inv1 = new Invoice(r1);
+//        inv1.generateInvoice();
+//
+//        invoices.add(inv1);
 
         // ---------- STAFF ----------
         Admin admin = new Admin("admin", "admin123",
-                LocalDate.of(1990,1,1), 40, Role.ADMIN);
+                "1990-01-01", 40);
 
         Receptionist rec = new Receptionist("rec", "rec123",
-                LocalDate.of(1995,1,1), 35, Role.RECEPTIONIST);
+                "1995-01-01", 35);
 
         staffMembers.add(admin);
         staffMembers.add(rec);

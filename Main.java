@@ -1,4 +1,3 @@
-package cli;// Imports
 import database.HotelDatabase;
 import exceptions.InvalidInputException;
 import exceptions.InvalidPriceException;

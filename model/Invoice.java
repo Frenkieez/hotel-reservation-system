@@ -1,27 +1,74 @@
+// Eslam version 1
+
 package model;
 
-/*
- * TEMPORARY VERSION of Invoice class
- * Used until we integrate full real classes
- */
-public class Invoice {
+import enums.PaymentMethod;
+import interfaces.Payable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
-    private Reservation reservation;
+public class Invoice implements Payable {
+
+    private LocalDate paymentDate;
     private double totalAmount;
+    private ArrayList<Payment> payments;
 
-    public Invoice(Reservation reservation) {
-        this.reservation = reservation;
+    // Constructor
+    public Invoice(double totalAmount) {
+        this.totalAmount = totalAmount;
+        this.payments = new ArrayList<>();
     }
 
-    public void generateInvoice() {
-        totalAmount = 100; // fixed temp value
+    // Print total amount (fixed)
+    public void printTotalAmount() {
+        System.out.println("Total amount: " + totalAmount);
     }
 
+    // Implement Payable
+    @Override
     public void pay(double amount) {
-        System.out.println("Payment done (temp)");
+        addPayment(amount, PaymentMethod.CASH); // default method
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
+    // Add payment with method
+    public void addPayment(double amount, PaymentMethod method) {
+        payments.add(new Payment(amount, method));
+
+        if (getPaidAmount() >= totalAmount) {
+            paymentDate = LocalDate.now();
+            System.out.println("Payment successful");
+        } else {
+            System.out.println("Partial payment added");
+        }
+    }
+
+    // Calculate total paid
+    public double getPaidAmount() {
+        double sum = 0;
+        for (Payment p : payments) {
+            sum += p.getAmount();
+        }
+        return sum;
+    }
+
+    // Check if fully paid
+    public boolean isFullyPaid() {
+        return getPaidAmount() >= totalAmount;
+    }
+
+    public void printReceipt() {
+        System.out.println("Total amount: " + totalAmount);
+        System.out.println("Amount paid: " + getPaidAmount());
+
+        System.out.println("\nPayments:");
+        for (Payment p : payments) {
+            System.out.println("- " + p.getMethod() + ": " + p.getAmount() + " on " + p.getDate());
+        }
+
+        if (isFullyPaid()) {
+            System.out.println("\nStatus: Paid");
+        } else {
+            System.out.println("\nStatus: Pending (remaining: " + (totalAmount - getPaidAmount()) + ")");
+        }
     }
 }
