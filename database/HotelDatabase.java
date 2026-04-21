@@ -75,7 +75,7 @@ public class HotelDatabase {
         Admin admin = new Admin("admin", "admin123",
                 "1990-01-01", 40);
 
-        Receptionist rec = new Receptionist("rec", "rec123",
+        Receptionist rec = new Receptionist("receptionist", "rec123",
                 "1995-01-01", 35);
 
         staffMembers.add(admin);
