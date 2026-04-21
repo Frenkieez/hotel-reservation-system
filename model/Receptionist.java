@@ -22,56 +22,53 @@ public class Receptionist extends Staff {
     // Method to check in a guest
     public void checkInGuest(int roomNumber) {
 
-        for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
-            Reservation res = HotelDatabase.reservations.get(i);
-            //getRoomNumber, getStatus, getRoom pay are methods in the other classes that will be implemented when the classes are finished
+        for (Reservation reservation : HotelDatabase.reservations) {
 
-            if (res.getRoom().getRoomNumber() == roomNumber) {
+            if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
-                if (res.getStatus() == ReservationStatus.CONFIRMED) {
-                    res.setStatus(ReservationStatus.COMPLETED);
-                    return;
+                if (reservation.getStatus() == ReservationStatus.CONFIRMED) {
+                    System.out.println("Guest checked in");
                 } else {
                     System.out.println("Reservation not confirmed");
-                    return;
                 }
+
+                return;
             }
         }
 
-        //System.out.println("Reservation not found");
+        System.out.println("Reservation not found");
     }
 
     // Method to check out a guest
     public void checkOutGuest(int roomNumber) throws InvalidDateException, InvalidReservationException {
 
-        for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
-            Reservation res = HotelDatabase.reservations.get(i);
-            //getRoomNumber, getStatus, getRoomType, getPrice, setPaymentMethod, pay are methods in the other classes that will be implemented when the classes are finished
-            if (res.getRoom().getRoomNumber() == roomNumber) {
+        for (Reservation reservation : HotelDatabase.reservations) {
 
-                if (res.getStatus() == ReservationStatus.CONFIRMED) {
+            if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
-                    double price = res.calculateTotal();
+                if (reservation.getStatus() == ReservationStatus.CONFIRMED) {
 
-                    Invoice invoice = new Invoice(res);
+                    double price = reservation.calculateTotal();
+
+                    Invoice invoice = new Invoice(reservation, reservation.calculateTotal());
                     invoice.generateInvoice();
 
                     invoice.setPaymentMethod(PaymentMethod.CASH);
                     invoice.pay(price);
 
-                    res.complete();
+                    reservation.complete();
 
-                    System.out.println("Guest checked out and paid");
+                    System.out.println("Guest checked out successfully");
 
-                    return;
                 } else {
                     System.out.println("Guest not checked in yet");
-                    return;
                 }
+
+                return;
             }
         }
 
-        //System.out.println("Reservation not found");
+        System.out.println("Reservation not found");
     }
 
 }

@@ -47,21 +47,35 @@ public class Reservation {
    pending then either (confirmed/canceled) then completed (in case confirmed)
    */
 
+    // some new guard methods (lets us see whether method can have access to change status or not)
+    public boolean canConfirm() {
+        return status == ReservationStatus.PENDING;
+    }
+
+    public boolean canCancel() {
+        return status == ReservationStatus.PENDING || status == ReservationStatus.CONFIRMED;
+    }
+
+    public boolean canComplete() {
+        return status == ReservationStatus.CONFIRMED;
+    }
+
+    // Status methods themselves
     public void confirm() throws InvalidDateException {
-        if (status != ReservationStatus.PENDING) return; // because we only can confirm the pending (waiting) reservation
+        if (!canConfirm()) return; // because we only can confirm the pending (waiting) reservation
         if (! (room.isAvailable(checkIn, checkOut)) ) {return;} // if room is not available return
         status = ReservationStatus.CONFIRMED;
         // removed the setAvailable(false); because we now are using the date based one
     }
 
     public void cancel() {
-        if (status == ReservationStatus.COMPLETED) return; // if reservation is complete we cannot cancel it
+        if (!canCancel()) return; // if reservation is complete we cannot cancel it
         status = ReservationStatus.CANCELLED;
         // removed the setAvailable(true); because we are now using the data based one
     }
 
     public void complete() {
-        if (status != ReservationStatus.CONFIRMED) return; // bec only confirmed reservations can be completed
+        if (!canComplete()) return; // bec only confirmed reservations can be completed
         status = ReservationStatus.COMPLETED;
     }
 

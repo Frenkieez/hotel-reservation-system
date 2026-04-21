@@ -14,7 +14,7 @@ public class Invoice implements Payable {
     private ArrayList<Payment> payments;
 
     // Constructor
-    public Invoice(double totalAmount) {
+    public Invoice(Reservation reservation, double totalAmount) {
         this.totalAmount = totalAmount;
         this.payments = new ArrayList<>();
     }
@@ -70,5 +70,11 @@ public class Invoice implements Payable {
         } else {
             System.out.println("\nStatus: Pending (remaining: " + (totalAmount - getPaidAmount()) + ")");
         }
+    }
+
+    public void generateInvoice() {
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
     }
 }
