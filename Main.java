@@ -61,11 +61,11 @@ public class Main {
     }
 
 
-    public static Guest guestAuth(Scanner scanner) { // method that makes sure that guest is authentic (returns a guest type)
+    public static Guest guestAuth(Scanner scanner) {
 
         while (true) {
 
-            System.out.println("\n=== GUEST ACCESS ==="); // only for better shape
+            System.out.println("\n=== GUEST ACCESS ===");
             System.out.println("1: Login");
             System.out.println("2: Register");
             System.out.println("0: Back");
@@ -75,92 +75,94 @@ public class Main {
             try {
                 choice = readIntBetween(scanner, 0, 2);
             } catch (InvalidInputException e) {
-                System.out.println(e.getMessage()); // if any error occurs, this throws an exception
-                continue; // loops until user enters a valid input
+                System.out.println(e.getMessage());
+                continue;
             }
 
             // REGISTER
-
             if (choice == 2) {
 
-                System.out.print("Username: "); // prompts for username
+                System.out.print("Username: ");
                 String username = scanner.nextLine();
 
                 String password;
-                while (true) { // this loop validates the password to be >= 6 characters
-                    System.out.print("Password: "); // prompts for password
+                while (true) {
+                    System.out.print("Password: ");
                     password = scanner.nextLine();
 
                     if (password.length() < 6) {
                         System.out.println("Password must be at least 6 characters");
-                        continue; // this loops if invalid input is there
+                        continue;
                     }
-                    break; // exits loop if input is valid
+                    break;
                 }
 
-                System.out.print("Address: "); // prompts for address
+                System.out.print("Address: ");
                 String address = scanner.nextLine();
 
                 Gender gender;
                 while (true) {
-                    System.out.print("1: Male .. 2: Female\nGender: "); // prompts for gender
+                    System.out.print("1: Male .. 2: Female\nGender: ");
                     try {
                         int genderId = readIntBetween(scanner, 1, 2);
-
-                        if (genderId == 1) {
-                            gender = Gender.MALE; // if one is the input
-                        } else {
-                            gender = Gender.FEMALE; // if input is not one (two)
-                        }
-
+                        gender = (genderId == 1) ? Gender.MALE : Gender.FEMALE;
                         break;
                     } catch (InvalidInputException e) {
-                        System.out.println(e.getMessage()); // if any error occurs, this throws an exception
+                        System.out.println(e.getMessage());
                     }
                 }
 
-                Guest g = new Guest( // creates a new Guest object that has the details just entered by the user
+                Guest g = new Guest(
                         username,
                         password,
-                        java.time.LocalDate.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth()), // I used here getMonthValue as i want an integer not enum
+                        java.time.LocalDate.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth()),
                         1000,
                         address,
                         gender
                 );
 
                 try {
-                    g.register(username, password); // I used the register method I created in Guest class, if we want more consistency I would have made a new method called register like I made in Admin ,Receptionist
+                    g.register(username, password);
                     System.out.println("Registered successfully");
                 } catch (Exception e) {
-                    System.out.println(e.getMessage()); // if any error occurs, this throws an exception
+                    System.out.println(e.getMessage());
                 }
             }
 
-            // LOGIN
-
+            // LOGIN (FIXED)
             else if (choice == 1) {
 
-                System.out.print("Username: "); // prompts for username
+                System.out.print("Username: ");
                 String username = scanner.nextLine();
 
-                System.out.print("Password: "); // prompts for password
+                System.out.print("Password: ");
                 String password = scanner.nextLine();
 
-                for (Guest g : HotelDatabase.guests) { // loops in all guests in database
-                    try {
-                        g.login(username, password); // if valid credentials
-                        System.out.println("Login success"); // I used the login method I created in Guest class, if we want more consistency I would have made a new method called login like I made in Admin ,Receptionist
-                        return g;
-                    } catch (Exception e) {
-                        System.out.println("Login failed: " + e.getMessage()); // if any error occurs, this throws an exception
+                Guest found = null;
+
+                for (Guest g : HotelDatabase.guests) {
+                    if (g.getUsername().equals(username)) {
+                        found = g;
+                        break;
                     }
                 }
 
-                System.out.println("Invalid credentials");
+                if (found == null) {
+                    System.out.println("Invalid credentials");
+                    continue;
+                }
+
+                try {
+                    found.login(username, password);
+                    System.out.println("Login success");
+                    return found;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
 
             else if (choice == 0) {
-                return null; // back to previous method
+                return null;
             }
         }
     }
@@ -185,7 +187,7 @@ public class Main {
 
             if (choice == 1) {
 
-                System.out.print("Username: "); // prompts for username
+                System.out.print("Username: "); // nextline
                 String username = scanner.nextLine();
 
                 String password;
@@ -195,16 +197,16 @@ public class Main {
 
                     if (password.length() < 6) {
                         System.out.println("Password must be at least 6 characters");
-                        continue; // this loops if invalid input is there
+                        continue;
                     }
-                    break; // exits loop if input is valid
+                    break;
                 }
 
                 for (Staff s : HotelDatabase.staffMembers) { // loops in all staff members in database
                     if (s instanceof Receptionist) { // looks if s is an instance of Receptionist
                         Receptionist receptionist = (Receptionist) s;
 
-                        if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) { // if valid credentials
+                        if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
                             System.out.println("Login success");
                             return receptionist;
                         }
@@ -235,31 +237,31 @@ public class Main {
                 choice = readIntBetween(scanner, 0, 1);
             } catch (InvalidInputException e) {
                 System.out.println(e.getMessage()); // if any error occurs, this throws an exception
-                continue; // loops until user enters a valid input
+                continue;
             }
 
             if (choice == 1) {
 
-                System.out.print("Username: "); // prompts for username
-                String username = scanner.next();
+                System.out.print("Username: "); // CHANGED: FIXED next()/nextLine bug
+                String username = scanner.nextLine();
 
                 String password;
-                while (true) { // this loop validates the password to be >= 6 characters
-                    System.out.print("Password: "); // prompts for password
+                while (true) {
+                    System.out.print("Password: ");
                     password = scanner.nextLine();
 
                     if (password.length() < 6) {
                         System.out.println("Password must be at least 6 characters");
-                        continue; // this loops if invalid input is there
+                        continue;
                     }
-                    break; // exits loop if input is valid
+                    break;
                 }
 
-                for (Staff s : HotelDatabase.staffMembers) { // loops in all staff members in database
-                    if (s instanceof Admin) { // looks if s is an instance of Admin
+                for (Staff s : HotelDatabase.staffMembers) {
+                    if (s instanceof Admin) {
                         Admin admin = (Admin) s;
 
-                        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {  // if valid credentials
+                        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
                             System.out.println("Login success");
                             return admin;
                         }
@@ -283,10 +285,10 @@ public class Main {
 
         System.out.println("\nWelcome To Hotel Reservation System"); // just for a better shape
 
-        while (true) { // Loop that makes the program runs infinitely unless user chose to exit
+        while (true) {
 
             int role;
-            while (true) { // Main Menu loop
+            while (true) {
                 System.out.println("\nChoose your role:");
                 System.out.println("\n1: Guest");
                 System.out.println("\n2: Receptionist");
@@ -296,27 +298,27 @@ public class Main {
                 try {
                     role = readIntBetween(scanner, 0, 3);
                     break;
-                } catch (InvalidInputException e) { // if any error occurs, this throws an exception
+                } catch (InvalidInputException e) {
                     System.out.println(e.getMessage());
                 }
             }
 
             if (role == 1) {
 
-                Guest guest = guestAuth(scanner); // checks if guest is a valid one
+                Guest guest = guestAuth(scanner);
             }
 
             else if (role == 2) {
 
-                Receptionist receptionist = receptionistAuth(scanner); // checks if receptionist is a valid one
+                Receptionist receptionist = receptionistAuth(scanner);
             }
 
             else if (role == 3) {
 
-                Admin admin = adminAuth(scanner); // checks if Admin is a valid one
+                Admin admin = adminAuth(scanner);
             }
 
-            else { // if choice is 0 / EXIT
+            else {
                 System.out.println("Exiting... Thank You!");
                 break;
             }
