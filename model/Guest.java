@@ -34,12 +34,6 @@ public class Guest {
         setAddress(address);
         setGender(gender);
         this.reservations = new ArrayList<>();
-//        this.username = username;
-//        this.password = password;
-//        this.dateOfBirth = dateOfBirth; -----> old assigning (no validation) [all commented out]
-//        this.balance = balance;
-//        this.address = address;
-//        this.gender = gender;
     }
 
 
@@ -107,31 +101,6 @@ public class Guest {
             throw new InvalidReservationException("You have NO access to cancel this reservation");
         }
     }
-
-
-
-    /* temporary payInvoice class !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    public void payInvoice(Invoice invoice, double amount)
-        throws InvalidPaymentException {
-
-    // 1. Validate invoice
-    if (invoice == null) {
-        throw new InvalidPaymentException("Invoice is invalid");
-    }
-
-    // 2. Check balance
-    if (balance < amount) {
-        throw new InvalidPaymentException("Insufficient balance");
-    }
-
-    // 3. Deduct balance
-    balance -= amount;
-
-    // 4. Process payment
-    invoice.pay(amount);
-}
-*/
 
     // setters
     void setUsername(String username) {

@@ -27,45 +27,51 @@ public class Main {
     HotelDatabase.initializeData(); // dummy data is created
 
         System.out.println("\nWelcome To Hotel Reservation System");
-        int role;
-        while (true){
-            System.out.println("\nChoose your role:");
-            System.out.println("\n1: Guest");
-            System.out.println("\n2: Receptionist");
-            System.out.println("\n3: Admin");
-            System.out.println("\n0: Exit");
+
+         while(true){
+
+             int role;
+             while (true){
+                 System.out.println("\nChoose your role:");
+                 System.out.println("\n1: Guest");
+                 System.out.println("\n2: Receptionist");
+                 System.out.println("\n3: Admin");
+                 System.out.println("\n0: Exit");
 
 
-            try {
-                role = readInt(scanner);
+                 try {
+                     role = readInt(scanner);
 
-                if (role >= 0 && role <= 3) {
-                    break;
-                }
+                     if (role >= 0 && role <= 3) {
+                         break;
+                     }
 
-                System.out.println("Invalid option. Choose 0-3.");
+                     System.out.println("Invalid option. Choose 0-3.");
 
-            } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        // routing the choices outside the loop to ensure we have valid choice
-        if (role == 1) {
+                 } catch (InvalidInputException e) {
+                     System.out.println(e.getMessage());
+                 }
+             }
 
-            System.out.println("Guest part...");
-        }
+             if (role == 1) {
 
-        else if (role == 2) {
-            System.out.println("Receptionist part...");
-        }
+                 System.out.println("Guest part...");
+             }
 
-        else if (role == 3) {
-            System.out.println("Admin part...");
-        }
+             else if (role == 2) {
+                 System.out.println("Receptionist part...");
+             }
 
-        else {
-            System.out.println("Exiting... Thank You!");
-        }
+             else if (role == 3) {
+                 System.out.println("Admin part...");
+             }
+
+             else {
+                 System.out.println("Exiting... Thank You!");
+                 break;
+             }
+
+         }
 
     }
 }
