@@ -134,7 +134,7 @@ public class Guest {
     }
 
     // getters
-    String getUsername(){ return this.username; }
+    public String getUsername(){ return this.username; }
     String getPassword(){ return this.password; }
     LocalDate getDateofBirth(){ return this.dateOfBirth; }
     double getBalance(){ return this.balance; }
