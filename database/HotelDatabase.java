@@ -52,8 +52,8 @@ public class HotelDatabase {
         rooms.add(room2);
 
         // ---------- GUESTS ----------
-        Guest g1 = new Guest("user1", "123456", LocalDate.of(2000,1,1), 1000, "Cairo", Gender.MALE);
-        Guest g2 = new Guest("user2", "123456", LocalDate.of(1999,5,5), 500, "Giza", Gender.FEMALE);
+        Guest g1 = new Guest("u1", "111111", LocalDate.of(2000,1,1), 1000, "Cairo", Gender.MALE);
+        Guest g2 = new Guest("u2", "111111", LocalDate.of(1999,5,5), 500, "Giza", Gender.FEMALE);
 
         guests.add(g1);
         guests.add(g2);
@@ -72,10 +72,10 @@ public class HotelDatabase {
 //        invoices.add(inv1);
 
         // ---------- STAFF ----------
-        Admin admin = new Admin("admin", "admin123",
+        Admin admin = new Admin("a", "111111",
                 "1990-01-01", 40);
 
-        Receptionist rec = new Receptionist("receptionist", "rec123",
+        Receptionist rec = new Receptionist("r", "111111",
                 "1995-01-01", 35);
 
         staffMembers.add(admin);

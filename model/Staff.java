@@ -86,6 +86,7 @@ public abstract class Staff {
             System.out.println("Balance: " + g.getBalance());
             System.out.println("Address: " + g.getAddress());
             System.out.println("Gender: " + g.getGender());
+            System.out.println("----------------");
         }
     }
     // Method to view room information
@@ -96,6 +97,7 @@ public abstract class Staff {
             //getRoomNumber and getRoomType are methods in the Room class that will be implemented when the class is finished
             System.out.println("Room Number: " + r.getRoomNumber());
             System.out.println("Room Type: " + r.getType());
+            System.out.println("----------------");
         }
     }
     // Method to view booking information
@@ -108,6 +110,8 @@ public abstract class Staff {
             System.out.println("Guest: " + res.getGuest().getUsername());
             System.out.println("Room: " + res.getRoom().getRoomNumber());
             System.out.println("Status: " + res.getStatus());
+            System.out.println("Check-in: " + res.getCheckIn());
+            System.out.println("Check-out: " + res.getCheckOut());
             System.out.println("-------------------");
         }
 

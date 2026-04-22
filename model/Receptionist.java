@@ -27,6 +27,7 @@ public class Receptionist extends Staff {
             if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
                 if (reservation.getStatus() == ReservationStatus.CONFIRMED) {
+                    reservation.complete();
                     System.out.println("Guest checked in");
                 } else {
                     System.out.println("Reservation not confirmed");
@@ -46,23 +47,27 @@ public class Receptionist extends Staff {
 
             if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
-                if (reservation.getStatus() == ReservationStatus.CONFIRMED) {
-
-                    double price = reservation.calculateTotal();
-
-                    Invoice invoice = new Invoice(reservation, reservation.calculateTotal());
-                    invoice.generateInvoice();
-
-                    invoice.setPaymentMethod(PaymentMethod.CASH);
-                    invoice.pay(price);
-
-                    reservation.complete();
-
-                    System.out.println("Guest checked out successfully");
-
-                } else {
+                if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
                     System.out.println("Guest not checked in yet");
+                    return;
                 }
+
+                double price = reservation.calculateTotal();
+
+                // create invoice (simple version)
+                Invoice invoice = new Invoice(reservation, price);
+
+                // mark reservation completed
+                reservation.complete();
+
+                // store invoice globally
+                HotelDatabase.invoices.add(invoice);
+
+                // IMPORTANT: also link to guest if you have it
+                reservation.getGuest().getInvoices().add(invoice);
+
+                System.out.println("Guest checked out successfully");
+                System.out.println("Invoice created: " + price);
 
                 return;
             }

@@ -1,134 +1,116 @@
-// TEMP VERSION OF INVOICE AND PAYMENT CLASS
-
 package model;
 
-import database.HotelDatabase;
 import enums.PaymentMethod;
-import exceptions.InvalidDateException;
-import exceptions.InvalidReservationException;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Invoice {
 
     private Reservation reservation;
     private double totalAmount;
-    private LocalDate paymentDate;
+    private double paidAmount;
 
-    private List<Payment> payments = new ArrayList<>();
+    private boolean paid;
+    private LocalDate createdAt;
 
-    private boolean generated = false;
+    private PaymentMethod paymentMethod;
 
-    // Constructor
-    public Invoice(Reservation reservation, double v) throws InvalidDateException, InvalidReservationException {
+    private ArrayList<String> paymentHistory;
+
+    public Invoice(Reservation reservation, double totalAmount) {
+
         this.reservation = reservation;
-        this.totalAmount = reservation.calculateTotal();
+        this.totalAmount = totalAmount;
+
+        this.paidAmount = 0;
+        this.paid = false;
+
+        this.createdAt = LocalDate.now();
+
+        this.paymentHistory = new ArrayList<>();
     }
 
-    // Generate invoice (connects to system)
-    public void generateInvoice() {
-        if (generated) return;
-
-        HotelDatabase.invoices.add(this);
-        generated = true;
-
-        System.out.println("Invoice generated for reservation");
-        System.out.println("Room: " + reservation.getRoom().getRoomNumber());
-        System.out.println("Guest: " + reservation.getGuest().getUsername());
-        System.out.println("Total: " + totalAmount);
-    }
-
-    // Pay full amount (default)
-    public void pay(double amount) {
-        addPayment(amount, PaymentMethod.CASH);
-    }
-
-    // Pay with method
-    public void addPayment(double amount, PaymentMethod method) {
+    // /////////////////////PAY WITH METHOD/////////////////////
+    public void pay(double amount, PaymentMethod method) {
 
         if (amount <= 0) {
             System.out.println("Invalid payment amount");
             return;
         }
 
-        payments.add(new Payment(amount, method));
+        if (paid) {
+            System.out.println("Invoice already fully paid");
+            return;
+        }
 
-        double paid = getPaidAmount();
+        this.paymentMethod = method;
 
-        if (paid >= totalAmount) {
-            paymentDate = LocalDate.now();
-            System.out.println("Payment completed successfully");
+        paidAmount += amount;
 
-            reservation.complete(); // important system link
+        paymentHistory.add(method + " -> " + amount);
+
+        if (paidAmount >= totalAmount) {
+            paidAmount = totalAmount;
+            paid = true;
+            System.out.println("Invoice fully paid using " + method);
         } else {
-            System.out.println("Partial payment done");
+            System.out.println("Partial payment done using " + method);
+            System.out.println("Remaining: " + (totalAmount - paidAmount));
         }
     }
 
-    // Total paid
-    public double getPaidAmount() {
-        double sum = 0;
-        for (Payment p : payments) {
-            sum += p.getAmount();
-        }
-        return sum;
+    // /////////////////////OVERLOAD (DEFAULT CASH)/////////////////////
+    public void pay(double amount) {
+        pay(amount, PaymentMethod.CASH);
     }
 
-    // Remaining balance
-    public double getRemaining() {
-        return totalAmount - getPaidAmount();
-    }
+    // /////////////////////PRINT INVOICE/////////////////////
+    public void printInvoice() {
 
-    // Status check
-    public boolean isPaid() {
-        return getPaidAmount() >= totalAmount;
-    }
+        System.out.println("\n========== INVOICE ==========");
 
-    // Print invoice
-    public void printReceipt() {
-        System.out.println("\n===== INVOICE =====");
         System.out.println("Guest: " + reservation.getGuest().getUsername());
         System.out.println("Room: " + reservation.getRoom().getRoomNumber());
-        System.out.println("Total: " + totalAmount);
-        System.out.println("Paid: " + getPaidAmount());
-        System.out.println("Remaining: " + getRemaining());
 
-        System.out.println("\nPayments:");
-        for (Payment p : payments) {
-            System.out.println(p.getMethod() + " -> " + p.getAmount());
+        System.out.println("Check-in: " + reservation.getCheckIn());
+        System.out.println("Check-out: " + reservation.getCheckOut());
+
+        System.out.println("Created At: " + createdAt);
+
+        System.out.println("Total: " + totalAmount);
+        System.out.println("Paid: " + paidAmount);
+
+        System.out.println("Status: " + (paid ? "PAID" : "PENDING"));
+
+        System.out.println("Payment Method: " +
+                (paymentMethod == null ? "NOT SET" : paymentMethod));
+
+        System.out.println("\nHistory:");
+        for (String log : paymentHistory) {
+            System.out.println("- " + log);
         }
 
-        System.out.println("\nStatus: " + (isPaid() ? "PAID" : "PENDING"));
+        System.out.println("=============================\n");
     }
 
-    // Getters
-    public Reservation getReservation() {
-        return reservation;
-    }
-
+    // getters
     public double getTotalAmount() {
         return totalAmount;
     }
 
-    public LocalDate getPaymentDate() {
-        return paymentDate;
+    public double getPaidAmount() {
+        return paidAmount;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-    }
-}
-
-class Payment {
-    private double amount;
-    private PaymentMethod method;
-
-    public Payment(double amount, PaymentMethod method) {
-        this.amount = amount;
-        this.method = method;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public double getAmount() { return amount; }
-    public PaymentMethod getMethod() { return method; }
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
 }

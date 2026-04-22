@@ -60,12 +60,13 @@ public class Reservation {
         return status == ReservationStatus.CONFIRMED;
     }
 
-    // Status methods themselves
+
     public void confirm() throws InvalidDateException {
-        if (!canConfirm()) return; // because we only can confirm the pending (waiting) reservation
-        if (! (room.isAvailable(checkIn, checkOut)) ) {return;} // if room is not available return
-        status = ReservationStatus.CONFIRMED;
+        if (!canConfirm()) {
+            throw new InvalidDateException("Cannot confirm reservation");
+        }
         // removed the setAvailable(false); because we now are using the date based one
+        status = ReservationStatus.CONFIRMED;
     }
 
     public void cancel() {
@@ -95,5 +96,9 @@ public class Reservation {
     }
     public ReservationStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
     }
 }

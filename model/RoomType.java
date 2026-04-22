@@ -41,4 +41,10 @@ public class RoomType {
     public void setName(String name) {                                                                                  // added by 3elba
         this.name = name;
     }
+
+    // outputs room type instead of hashing
+    @Override
+    public String toString() {
+        return name;
+    }
 }

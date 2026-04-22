@@ -3,6 +3,7 @@ package model;
 // imports
 import database.HotelDatabase;
 import enums.Gender;
+import enums.ReservationStatus;
 import exceptions.*;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class Guest {
     private String address;
     private Gender gender;
     private List<Reservation> reservations;
+    private List<Invoice> invoices = new ArrayList<>();
 
     // constructors
     public Guest(String username, String password,
@@ -74,21 +76,36 @@ public class Guest {
         // if all previous tests are passed successfully, user has logged in
     }
 
-    public Reservation makeReservation(Room room, LocalDate CheckIn, LocalDate CheckOut)
-            throws RoomNotAvailableException, InvalidReservationException, InvalidDateException {
-        if ( !(room.isAvailable(CheckIn, CheckOut)) ){ // if room is not available
-            throw new RoomNotAvailableException("Room is not available for the selected days");
+    public Reservation makeReservation(Room room, LocalDate checkIn, LocalDate checkOut)
+            throws InvalidDateException, InvalidReservationException {
+
+        // validate dates first
+        if (checkIn == null || checkOut == null) {
+            throw new InvalidDateException("Dates cannot be null");
         }
-        // if available, create new reservation
-        Reservation reservation = new Reservation(this, room, CheckIn, CheckOut);
 
-        // storing the new reservation in reservations list (local one)
-        reservations.add(reservation);
-        // then add to database
-        HotelDatabase.reservations.add(reservation);
+        if (!checkOut.isAfter(checkIn)) {
+            throw new InvalidDateException("Check-out must be after check-in");
+        }
 
+        // check availability BEFORE creating reservation
+        if (!room.isAvailable(checkIn, checkOut)) {
+            throw new InvalidDateException("Room not available for selected dates");
+        }
 
-        return reservation;
+        // create reservation
+        Reservation res = new Reservation(this, room, checkIn, checkOut);
+
+        // default state
+        res.setStatus(ReservationStatus.PENDING);
+
+        // adding reservation to list of reservations of guest
+        this.reservations.add(res);
+
+        // store in database
+        database.HotelDatabase.reservations.add(res);
+
+        return res;
     }
 
     // viewReservations method :
@@ -96,10 +113,43 @@ public class Guest {
         return reservations;
     }
 
-    public void cancelReservation(Reservation reservation) throws InvalidReservationException{
-        if (! (reservations.contains(reservation)) ){ // guest can ONLY cancel their own reservations
+    public void cancelReservation(Reservation reservation) throws InvalidReservationException {
+        boolean found = false;
+        for (Reservation r : reservations) {
+            if (r == reservation) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
             throw new InvalidReservationException("You have NO access to cancel this reservation");
         }
+
+        reservation.cancel();
+    }
+
+    // invoice part
+    public void payInvoice(Invoice invoice, double amount) {
+
+        if (!invoices.contains(invoice)) {
+            System.out.println("Invoice not found");
+            return;
+        }
+
+        if (invoice.isPaid()) {
+            System.out.println("Already paid");
+            return;
+        }
+
+        if (balance < amount) {
+            System.out.println("Insufficient balance");
+            return;
+        }
+
+        balance -= amount;
+        invoice.pay(amount);
+
+        System.out.println("Payment successful");
     }
 
     // setters
@@ -143,5 +193,8 @@ public class Guest {
 
     public List<Reservation> getReservations() {
         return Collections.unmodifiableList(this.reservations); // this line returns a list from the type Reservation for a better encapsulation
+    }
+    public List<Invoice> getInvoices() {
+        return invoices;
     }
 }

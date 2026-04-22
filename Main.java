@@ -20,6 +20,9 @@ ZAKER :
 
 import database.HotelDatabase;
 import enums.Gender;
+import enums.PaymentMethod;
+import enums.ReservationStatus;
+import exceptions.InvalidDateException;
 import exceptions.InvalidInputException;
 import exceptions.InvalidPriceException;
 import exceptions.InvalidReservationException;
@@ -285,7 +288,7 @@ public class Main {
 
 
     // Panels
-    public static void guestPanel(Scanner scanner, Guest guest) {
+    public static void guestPanel(Scanner scanner, Guest guest) throws InvalidInputException {
 
         while (true) {
 
@@ -294,12 +297,14 @@ public class Main {
             System.out.println("2: Make reservation");
             System.out.println("3: View my reservations");
             System.out.println("4: Cancel reservation");
+            System.out.println("5: View invoices");
+            System.out.println("6: Pay invoice");
             System.out.println("0: Logout");
 
             int choice;
 
             try {
-                choice = readIntBetween(scanner, 0, 4);
+                choice = readIntBetween(scanner, 0, 6);
             } catch (InvalidInputException e) {
                 System.out.println(e.getMessage());
                 continue;
@@ -319,7 +324,7 @@ public class Main {
                     int inMonth = readIntBetween(scanner, 1, 12);
 
                     System.out.print("Enter check-in year: ");
-                    int inYear = readIntBetween(scanner, 2024, 2100);
+                    int inYear = readIntBetween(scanner, today.getYear(), today.getYear()+100);
 
                     System.out.print("Enter check-out day: ");
                     int outDay = readIntBetween(scanner, 1, 31);
@@ -328,7 +333,7 @@ public class Main {
                     int outMonth = readIntBetween(scanner, 1, 12);
 
                     System.out.print("Enter check-out year: ");
-                    int outYear = readIntBetween(scanner, 2024, 2100);
+                    int outYear = readIntBetween(scanner, today.getYear(), today.getYear()+100);
 
                     LocalDate checkIn = LocalDate.of(inYear, inMonth, inDay);
                     LocalDate checkOut = LocalDate.of(outYear, outMonth, outDay);
@@ -467,9 +472,9 @@ public class Main {
                         Reservation r = guest.viewReservations().get(i);
 
                         System.out.println((i + 1) + ": Room " + r.getRoom().getRoomNumber());
-                        System.out.println("   Status: " + r.getStatus());
-                        System.out.println("   Check-in: " + r.getCheckIn());
-                        System.out.println("   Check-out: " + r.getCheckOut());
+                        System.out.println("Status: " + r.getStatus());
+                        System.out.println("Check-in: " + r.getCheckIn());
+                        System.out.println("Check-out: " + r.getCheckOut());
                         System.out.println("----------------");
                     }
 
@@ -488,6 +493,76 @@ public class Main {
                 }
             }
 
+            else if (choice == 5) {
+
+                if (guest.getInvoices().isEmpty()) {
+                    System.out.println("No invoices found");
+                    continue;
+                }
+
+                for (int i = 0; i < guest.getInvoices().size(); i++) {
+
+                    Invoice inv = guest.getInvoices().get(i);
+
+                    System.out.println((i + 1) + ": Room " + inv.getReservation().getRoom().getRoomNumber());
+                    System.out.println("   Total: " + inv.getTotalAmount());
+                    System.out.println("   Paid: " + inv.getPaidAmount());
+                    System.out.println("   Status: " + (inv.isPaid() ? "PAID" : "PENDING"));
+                    System.out.println("----------------");
+                }
+            }
+
+            else if (choice == 6) {
+
+                if (guest.getInvoices().isEmpty()) {
+                    System.out.println("No invoices to pay");
+                    continue;
+                }
+
+                // show invoices
+                for (int i = 0; i < guest.getInvoices().size(); i++) {
+
+                    Invoice inv = guest.getInvoices().get(i);
+
+                    System.out.println((i + 1) + ": Room " +
+                            inv.getReservation().getRoom().getRoomNumber() +
+                            " | Remaining: " +
+                            (inv.getTotalAmount() - inv.getPaidAmount()) +
+                            " | Status: " +
+                            (inv.isPaid() ? "PAID" : "PENDING"));
+                }
+
+                System.out.print("Choose invoice: ");
+                int index = readIntBetween(scanner, 1, guest.getInvoices().size());
+
+                Invoice selected = guest.getInvoices().get(index - 1);
+
+                System.out.print("Enter amount to pay: ");
+                double amount = scanner.nextDouble();
+                scanner.nextLine();
+
+                System.out.println("Choose payment method:");
+                System.out.println("1: CASH");
+                System.out.println("2: CARD");
+                System.out.println("3: ONLINE");
+
+                int methodChoice = readIntBetween(scanner, 1, 3);
+
+                PaymentMethod method;
+
+                if (methodChoice == 1) {
+                    method = PaymentMethod.CASH;
+                } else if (methodChoice == 2) {
+                    method = PaymentMethod.CARD;
+                } else {
+                    method = PaymentMethod.ONLINE;
+                }
+
+                selected.pay(amount, method);
+
+                System.out.println("Payment processed successfully");
+            }
+
             // ======================
             // LOGOUT
             // ======================
@@ -497,7 +572,161 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws InvalidPriceException, InvalidReservationException {
+    public static void receptionistPanel(Scanner scanner, Receptionist receptionist) throws InvalidInputException, InvalidDateException, InvalidReservationException {
+
+        while (true) {
+
+            System.out.println("\n=== RECEPTIONIST PANEL ===");
+            System.out.println("1: View guests");
+            System.out.println("2: View rooms");
+            System.out.println("3: View reservations");
+            System.out.println("4: Confirm reservation");
+            System.out.println("5: Check-in guest");
+            System.out.println("6: Check-out guest");
+            System.out.println("0: Logout");
+
+            int choice;
+
+            try {
+                choice = readIntBetween(scanner, 0, 6);
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            // VIEW GUESTS
+            if (choice == 1) receptionist.viewGuest();
+
+                // VIEW ROOMS
+            else if (choice == 2) receptionist.viewRoom();
+
+                // VIEW RESERVATIONS
+            else if (choice == 3) receptionist.viewBooking();
+
+                // CONFIRM
+            else if (choice == 4) {
+
+                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
+                    Reservation r = HotelDatabase.reservations.get(i);
+                    System.out.println((i + 1) + ": " + r.getRoom().getRoomNumber() + " " + r.getStatus());
+                }
+
+                int index;
+
+                try {
+                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                Reservation r = HotelDatabase.reservations.get(index - 1);
+
+                try {
+                    r.confirm();
+                    System.out.println("Reservation confirmed successfully");
+                    System.out.println("Room: " + r.getRoom().getRoomNumber());
+                    System.out.println("Status: " + r.getStatus());
+                    System.out.println("Check-in: " + r.getCheckIn());
+                    System.out.println("Check-out: " + r.getCheckOut());
+                } catch (InvalidDateException e) {
+                    System.out.println("Cannot confirm reservation: " + e.getMessage());
+                }
+            }
+
+            // CHECK-IN (no status change)
+            else if (choice == 5) {
+
+                if (HotelDatabase.reservations.isEmpty()) {
+                    System.out.println("No reservations available");
+                    continue;
+                }
+
+                System.out.println("Choose reservation to check-in:");
+
+                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
+                    Reservation r = HotelDatabase.reservations.get(i);
+
+                    System.out.println((i + 1) + ": " +
+                            r.getRoom().getRoomNumber() + " " +
+                            r.getStatus());
+                }
+
+                int index;
+
+                try {
+                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                Reservation r = HotelDatabase.reservations.get(index - 1);
+
+                if (r.getStatus() != ReservationStatus.CONFIRMED) {
+                    System.out.println("Not allowed");
+                    continue;
+                }
+
+                System.out.println("Checked-in successfully");
+            }
+
+            // CHECK-OUT (FINAL STEP)
+            else if (choice == 6) {
+
+                if (HotelDatabase.reservations.isEmpty()) {
+                    System.out.println("No reservations available");
+                    continue;
+                }
+
+                System.out.println("Choose reservation to check-out:");
+
+                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
+
+                    Reservation r = HotelDatabase.reservations.get(i);
+
+                    System.out.println((i + 1) + ": Room " + r.getRoom().getRoomNumber()
+                            + " | Status: " + r.getStatus()
+                            + " | Guest: " + r.getGuest().getUsername());
+                }
+
+                int index;
+
+                try {
+                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                Reservation r = HotelDatabase.reservations.get(index - 1);
+
+                if (r.getStatus() != ReservationStatus.CONFIRMED) {
+                    System.out.println("Cannot check-out (must be CONFIRMED first)");
+                    continue;
+                }
+
+                double total = r.calculateTotal();
+
+                // /////////////////////CREATING INVOICE/////////////////////
+                Invoice invoice = new Invoice(r, total);
+
+                HotelDatabase.invoices.add(invoice);
+
+                // /////////////////////ATTACH TO GUEST/////////////////////
+                r.getGuest().getInvoices().add(invoice);
+
+                r.complete();
+
+                System.out.println("Check-out completed");
+                System.out.println("Invoice generated for amount: " + total);
+            }
+
+            else if (choice == 0) return;
+        }
+    }
+
+    public static void main(String[] args) throws InvalidPriceException, InvalidReservationException, InvalidInputException, InvalidDateException {
 
         Scanner scanner = new Scanner(System.in); // scanner object creation
         HotelDatabase.initializeData(); // dummy data is created
@@ -533,6 +762,9 @@ public class Main {
             else if (role == 2) {
 
                 Receptionist receptionist = receptionistAuth(scanner);
+                if (receptionist != null) {
+                    receptionistPanel(scanner, receptionist);
+                }
             }
 
             else if (role == 3) {
