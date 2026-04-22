@@ -28,7 +28,9 @@ public class Room {
     public boolean isAvailable(LocalDate newIn, LocalDate newOut) throws InvalidDateException {
         for (Reservation r : HotelDatabase.reservations){
                // if room = this room and status of this room is confirmed :
-            if (r.getRoom() == this && r.getStatus() == ReservationStatus.CONFIRMED){
+            if (r.getRoom() == this &&
+                    (r.getStatus() == ReservationStatus.CONFIRMED ||
+                            r.getStatus() == ReservationStatus.PENDING)){
                 // checking if there is overlapping in availability
                 // if NOT [new_checkOut is before current checkIn OR new_checkIn is after current checkOut] (not correct way of reservation)
                 if (! (newOut.isBefore(r.getCheckIn()) || newIn.isAfter(r.getCheckOut())) ){
