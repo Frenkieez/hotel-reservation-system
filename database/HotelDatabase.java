@@ -1,84 +1,170 @@
 package database;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import exceptions.InvalidDateException;
 import exceptions.InvalidPriceException;
 import exceptions.InvalidReservationException;
 import model.*;
-import enums.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import enums.Gender;
 
 public class HotelDatabase {
 
-    public static List<Guest> guests = new ArrayList<>();
-    public static List<Room> rooms = new ArrayList<>();
-    public static List<Reservation> reservations = new ArrayList<>();
-    public static List<Invoice> invoices = new ArrayList<>();
-    public static List<Amenity> amenities = new ArrayList<>();                                                          // edited by 3elba (+next line)
-    public static List<RoomType> roomTypes = new ArrayList<>();
+    public static ArrayList<Admin> admins = new ArrayList<>();
+    public static ArrayList<Receptionist> receptionists = new ArrayList<>();
+    public static ArrayList<Guest> guests = new ArrayList<>();
+    public static ArrayList<Room> rooms = new ArrayList<>();
+    public static ArrayList<RoomType> roomTypes = new ArrayList<>();
+    public static ArrayList<Amenity> amenities = new ArrayList<>();
+    public static ArrayList<Reservation> reservations = new ArrayList<>();
+    public static ArrayList<Invoice> invoices = new ArrayList<>();
 
-    public static List<Staff> staffMembers = new ArrayList<>();
+    public static void initializeData() throws InvalidPriceException, InvalidDateException, InvalidReservationException {
 
-    public static void initializeData() throws InvalidReservationException, InvalidPriceException {
+        admins.clear();
+        receptionists.clear();
+        guests.clear();
+        rooms.clear();
+        roomTypes.clear();
+        amenities.clear();
+        reservations.clear();
+        invoices.clear();
 
-        // ---------- ROOM TYPES ----------
-        RoomType single = new RoomType("Single", 100);
-        RoomType doubleRoom = new RoomType("Double", 180);
-
-        roomTypes.add(single);                                                                                          // edited by 3elba(+next line)
-        roomTypes.add(doubleRoom);
-
-        // ---------- AMENITIES ----------
+        // ======================
+        // AMENITIES
+        // ======================
         Amenity wifi = new Amenity("WiFi");
         Amenity tv = new Amenity("TV");
+        Amenity miniBar = new Amenity("Mini Bar");
+        Amenity ac = new Amenity("Air Conditioning");
 
-        amenities.add(wifi);                                                                                            // edited by 3elba(+next line)
+        amenities.add(wifi);
         amenities.add(tv);
+        amenities.add(miniBar);
+        amenities.add(ac);
 
-        // ---------- ROOMS ----------
-        Room room1 = new Room(101, single);
-        Room room2 = new Room(102, doubleRoom);
+        // ======================
+        // ROOM TYPES
+        // ======================
+        RoomType single = new RoomType("Single", 500);
+        RoomType dbl = new RoomType("Double", 800);
+        RoomType suite = new RoomType("Suite", 1500);
 
-        // attach amenities to rooms                                                                                    // edited by 3elba
-        room1.getAmenities().add(new Amenity("WiFi"));
-        room1.getAmenities().add(new Amenity("TV"));
+        roomTypes.add(single);
+        roomTypes.add(dbl);
+        roomTypes.add(suite);
 
-        room2.getAmenities().add(new Amenity("WiFi"));
-        room2.getAmenities().add(new Amenity("TV"));
+        // ======================
+        // ROOMS
+        // ======================
+        Room room101 = new Room(101, single);
+        Room room102 = new Room(102, dbl);
+        Room room201 = new Room(201, suite);
+
+        room101.addAmenity(wifi);
+        room101.addAmenity(ac);
+
+        room102.addAmenity(wifi);
+        room102.addAmenity(tv);
+        room102.addAmenity(ac);
+
+        room201.addAmenity(wifi);
+        room201.addAmenity(tv);
+        room201.addAmenity(miniBar);
+        room201.addAmenity(ac);
+
+        rooms.add(room101);
+        rooms.add(room102);
+        rooms.add(room201);
+
+        // ======================
+        // USERS
+        // ======================
+        Admin admin1 = new Admin("admin1", "Admin@123", "1985-03-10", 8);
+        Admin admin2 = new Admin("1", "111111", "1985-03-10", 8);
+        admins.add(admin1);
+        admins.add(admin2);
 
 
-        rooms.add(room1);
-        rooms.add(room2);
+        Receptionist receptionist1 = new Receptionist("reception1", "Recep@123", "1998-07-14", 8);
+        receptionists.add(receptionist1);
+        Receptionist receptionist2 = new Receptionist("r", "111111", "1998-07-14", 8);
+        receptionists.add(receptionist2);
 
-        // ---------- GUESTS ----------
-        Guest g1 = new Guest("u1", "111111", LocalDate.of(2000,1,1), 1000, "Cairo", Gender.MALE);
-        Guest g2 = new Guest("u2", "111111", LocalDate.of(1999,5,5), 500, "Giza", Gender.FEMALE);
+        Guest guest1 = new Guest("kareem", "Kareem@123",
+                LocalDate.of(2004, 5, 12), 5000,
+                "Cairo", Gender.MALE);
 
-        guests.add(g1);
-        guests.add(g2);
+        Guest guest2 = new Guest("u1", "111111",
+                LocalDate.of(2003, 9, 20), 7000,
+                "Nasr City", Gender.FEMALE);
 
-        // ---------- RESERVATIONS ----------
-        Reservation r1 = new Reservation(g1, room1,
-                LocalDate.now(),
-                LocalDate.now().plusDays(2));
+        guests.add(guest1);
+        guests.add(guest2);
 
-        reservations.add(r1);
+        // ======================
+        // RESERVATIONS (IMPORTANT FIX)
+        // ======================
+        Reservation reservation1 = new Reservation(
+                guest1,
+                room101,
+                LocalDate.of(2026, 5, 1),
+                LocalDate.of(2026, 5, 5)
+        );
 
-//        // ---------- INVOICES ----------
-//        Invoice inv1 = new Invoice(r1);
-//        inv1.generateInvoice();
-//
-//        invoices.add(inv1);
+        Reservation reservation2 = new Reservation(
+                guest2,
+                room102,
+                LocalDate.of(2026, 5, 10),
+                LocalDate.of(2026, 5, 13)
+        );
 
-        // ---------- STAFF ----------
-        Admin admin = new Admin("a", "111111",
-                "1990-01-01", 40);
+        // FIX: attach reservations to guest (THIS WAS YOUR BUG)
+        guest1.viewReservations().add(reservation1);
+        guest2.viewReservations().add(reservation2);
 
-        Receptionist rec = new Receptionist("r", "111111",
-                "1995-01-01", 35);
+        reservations.add(reservation1);
+        reservations.add(reservation2);
 
-        staffMembers.add(admin);
-        staffMembers.add(rec);
+        // ======================
+        // INVOICES
+        // ======================
+        Invoice invoice1 = new Invoice(reservation1,
+                room101.calculatePrice(
+                        LocalDate.of(2026, 5, 1),
+                        LocalDate.of(2026, 5, 5)
+                )
+        );
+
+        Invoice invoice2 = new Invoice(reservation2,
+                room102.calculatePrice(
+                        LocalDate.of(2026, 5, 10),
+                        LocalDate.of(2026, 5, 13)
+                )
+        );
+
+        invoices.add(invoice1);
+        invoices.add(invoice2);
+    }
+
+    // ======================
+    // ADD METHODS
+    // ======================
+    public static void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.getGuest().viewReservations().add(reservation); // FIX IMPORTANT
+    }
+
+    public static void addInvoice(Invoice invoice) {
+        invoices.add(invoice);
+    }
+
+    public static void addGuest(Guest guest) {
+        guests.add(guest);
+    }
+
+    public static void addRoom(Room room) {
+        rooms.add(room);
     }
 }
