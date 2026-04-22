@@ -13,15 +13,13 @@ public class Room {
 
     private int roomNumber;
     private RoomType type;
-    private ArrayList<Amenity> amenities;
-//    private boolean isAvailable;
+    private ArrayList<Amenity> amenities = new ArrayList<>();
 
     // Constructor
     public Room(int roomNumber, RoomType type) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.amenities = new ArrayList<>();
-//        this.isAvailable = true;
     }
 
     // Check availability
@@ -58,10 +56,13 @@ public class Room {
         return basePrice + extra;
     }
 
-    // Set availability
-//    public void setAvailable(boolean status) {
-//        this.isAvailable = status;
-//    }
+    public void addAmenity(Amenity amenity) {
+        if (amenity == null) return;
+
+        if (!amenities.contains(amenity)) {
+            amenities.add(amenity);
+        }
+    }
 
     // Getters
     public int getRoomNumber() {
@@ -72,9 +73,6 @@ public class Room {
         return type;
     }
 
-//    public boolean getAvailability() {
-//        return isAvailable;
-//    }
 
     public ArrayList<Amenity> getAmenities() {
         return amenities;

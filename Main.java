@@ -211,14 +211,13 @@ public class Main {
                     break;
                 }
 
-                for (Staff s : HotelDatabase.staffMembers) { // loops in all staff members in database
-                    if (s instanceof Receptionist) { // looks if s is an instance of Receptionist
-                        Receptionist receptionist = (Receptionist) s;
+                for (Receptionist receptionist : HotelDatabase.receptionists) {
 
-                        if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
-                            System.out.println("Login success");
-                            return receptionist;
-                        }
+                    if (receptionist.getUsername().equals(username) &&
+                            receptionist.getPassword().equals(password)) {
+
+                        System.out.println("Login success");
+                        return receptionist;
                     }
                 }
 
@@ -266,14 +265,13 @@ public class Main {
                     break;
                 }
 
-                for (Staff s : HotelDatabase.staffMembers) {
-                    if (s instanceof Admin) {
-                        Admin admin = (Admin) s;
+                for (Admin admin : HotelDatabase.admins) {
 
-                        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
-                            System.out.println("Login success");
-                            return admin;
-                        }
+                    if (admin.getUsername().equals(username) &&
+                            admin.getPassword().equals(password)) {
+
+                        System.out.println("Login success");
+                        return admin;
                     }
                 }
 
