@@ -44,7 +44,7 @@ public class Guest {
         if (username == null || username.isEmpty()){ // validates username
             throw new InvalidResgistrationException("Username MUST not be empty");
         }
-        for (Guest guest : HotelDatabase.guests) {
+        for (Guest guest : HotelDatabase.getGuests()) {
             if (guest.getUsername().equals(username)) { // checking here for duplicate usernames
                 throw new InvalidResgistrationException("Username already exists");
             }
@@ -57,7 +57,7 @@ public class Guest {
         setUsername(username);
         setPassword(password);
         // adding to database:
-        HotelDatabase.guests.add(this);
+        HotelDatabase.getGuests().add(this);
     }
 
     public void login(String username, String password) throws InvalidLoginException{
@@ -103,7 +103,7 @@ public class Guest {
         this.reservations.add(res);
 
         // store in database
-        database.HotelDatabase.reservations.add(res);
+        HotelDatabase.getReservations().add(res);
 
         return res;
     }
@@ -127,6 +127,19 @@ public class Guest {
 
         reservation.cancel();
     }
+
+    // add reservation method to make it encapsulated
+    public void addReservation(Reservation reservation) {
+
+        if (reservation == null) return;
+
+        // prevent duplicates
+        if (!this.reservations.contains(reservation)) {
+            this.reservations.add(reservation);
+        }
+    }
+
+
 
     // invoice part
     public void payInvoice(Invoice invoice, double amount) {

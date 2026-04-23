@@ -24,7 +24,7 @@ public class Room {
 
     // Check availability
     public boolean isAvailable(LocalDate newIn, LocalDate newOut) throws InvalidDateException {
-        for (Reservation r : HotelDatabase.reservations){
+        for (Reservation r : HotelDatabase.getReservations()){
                // if room = this room and status of this room is confirmed :
             if (r.getRoom() == this &&
                     (r.getStatus() == ReservationStatus.CONFIRMED ||
@@ -56,7 +56,7 @@ public class Room {
         return basePrice + extra;
     }
 
-    public void addAmenity(Amenity amenity) {
+    public void assignAmenity(Amenity amenity) {
         if (amenity == null) return;
 
         if (!amenities.contains(amenity)) {

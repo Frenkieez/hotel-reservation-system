@@ -11,15 +11,22 @@ import enums.Gender;
 
 public class HotelDatabase {
 
-    public static ArrayList<Admin> admins = new ArrayList<>();
-    public static ArrayList<Receptionist> receptionists = new ArrayList<>();
-    public static ArrayList<Guest> guests = new ArrayList<>();
-    public static ArrayList<Room> rooms = new ArrayList<>();
-    public static ArrayList<RoomType> roomTypes = new ArrayList<>();
-    public static ArrayList<Amenity> amenities = new ArrayList<>();
-    public static ArrayList<Reservation> reservations = new ArrayList<>();
-    public static ArrayList<Invoice> invoices = new ArrayList<>();
+    // ======================
+    // FIELDS (CHANGED: made private for encapsulation)
+    // ======================
+    private static ArrayList<Admin> admins = new ArrayList<>();
+    private static ArrayList<Receptionist> receptionists = new ArrayList<>();
+    private static ArrayList<Guest> guests = new ArrayList<>();
+    private static ArrayList<Room> rooms = new ArrayList<>();
+    private static ArrayList<RoomType> roomTypes = new ArrayList<>();
+    private static ArrayList<Amenity> amenities = new ArrayList<>();
+    private static ArrayList<Reservation> reservations = new ArrayList<>();
+    private static ArrayList<Invoice> invoices = new ArrayList<>();
 
+
+    // ======================
+    // INITIAL DATA
+    // ======================
     public static void initializeData() throws InvalidPriceException, InvalidDateException, InvalidReservationException {
 
         admins.clear();
@@ -62,17 +69,18 @@ public class HotelDatabase {
         Room room102 = new Room(102, dbl);
         Room room201 = new Room(201, suite);
 
-        room101.addAmenity(wifi);
-        room101.addAmenity(ac);
+        // CHANGED: using encapsulated method
+        room101.assignAmenity(wifi);
+        room101.assignAmenity(ac);
 
-        room102.addAmenity(wifi);
-        room102.addAmenity(tv);
-        room102.addAmenity(ac);
+        room102.assignAmenity(wifi);
+        room102.assignAmenity(tv);
+        room102.assignAmenity(ac);
 
-        room201.addAmenity(wifi);
-        room201.addAmenity(tv);
-        room201.addAmenity(miniBar);
-        room201.addAmenity(ac);
+        room201.assignAmenity(wifi);
+        room201.assignAmenity(tv);
+        room201.assignAmenity(miniBar);
+        room201.assignAmenity(ac);
 
         rooms.add(room101);
         rooms.add(room102);
@@ -82,14 +90,15 @@ public class HotelDatabase {
         // USERS
         // ======================
         Admin admin1 = new Admin("admin1", "Admin@123", "1985-03-10", 8);
-        Admin admin2 = new Admin("1", "111111", "1985-03-10", 8);
+        Admin admin2 = new Admin("a", "111111", "1985-03-10", 8);
+
         admins.add(admin1);
         admins.add(admin2);
 
-
         Receptionist receptionist1 = new Receptionist("reception1", "Recep@123", "1998-07-14", 8);
-        receptionists.add(receptionist1);
         Receptionist receptionist2 = new Receptionist("r", "111111", "1998-07-14", 8);
+
+        receptionists.add(receptionist1);
         receptionists.add(receptionist2);
 
         Guest guest1 = new Guest("kareem", "Kareem@123",
@@ -104,7 +113,7 @@ public class HotelDatabase {
         guests.add(guest2);
 
         // ======================
-        // RESERVATIONS (IMPORTANT FIX)
+        // RESERVATIONS
         // ======================
         Reservation reservation1 = new Reservation(
                 guest1,
@@ -120,9 +129,9 @@ public class HotelDatabase {
                 LocalDate.of(2026, 5, 13)
         );
 
-        // FIX: attach reservations to guest (THIS WAS YOUR BUG)
-        guest1.viewReservations().add(reservation1);
-        guest2.viewReservations().add(reservation2);
+        // CHANGED: use encapsulated linking
+        guest1.addReservation(reservation1);
+        guest2.addReservation(reservation2);
 
         reservations.add(reservation1);
         reservations.add(reservation2);
@@ -130,14 +139,16 @@ public class HotelDatabase {
         // ======================
         // INVOICES
         // ======================
-        Invoice invoice1 = new Invoice(reservation1,
+        Invoice invoice1 = new Invoice(
+                reservation1,
                 room101.calculatePrice(
                         LocalDate.of(2026, 5, 1),
                         LocalDate.of(2026, 5, 5)
                 )
         );
 
-        Invoice invoice2 = new Invoice(reservation2,
+        Invoice invoice2 = new Invoice(
+                reservation2,
                 room102.calculatePrice(
                         LocalDate.of(2026, 5, 10),
                         LocalDate.of(2026, 5, 13)
@@ -148,12 +159,16 @@ public class HotelDatabase {
         invoices.add(invoice2);
     }
 
+
     // ======================
-    // ADD METHODS
+    // ADD METHODS (WRITE CONTROL)
     // ======================
+
     public static void addReservation(Reservation reservation) {
         reservations.add(reservation);
-        reservation.getGuest().viewReservations().add(reservation); // FIX IMPORTANT
+
+        // CHANGED: safe linking
+        reservation.getGuest().addReservation(reservation);
     }
 
     public static void addInvoice(Invoice invoice) {
@@ -166,5 +181,42 @@ public class HotelDatabase {
 
     public static void addRoom(Room room) {
         rooms.add(room);
+    }
+
+
+    // ======================
+    // GETTERS (READ ACCESS)
+    // ======================
+
+    public static ArrayList<Admin> getAdmins() {
+        return admins;
+    }
+
+    public static ArrayList<Receptionist> getReceptionists() {
+        return receptionists;
+    }
+
+    public static ArrayList<Guest> getGuests() {
+        return guests;
+    }
+
+    public static ArrayList<Room> getRooms() {
+        return rooms;
+    }
+
+    public static ArrayList<RoomType> getRoomTypes() {
+        return roomTypes;
+    }
+
+    public static ArrayList<Amenity> getAmenities() {
+        return amenities;
+    }
+
+    public static ArrayList<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public static ArrayList<Invoice> getInvoices() {
+        return invoices;
     }
 }

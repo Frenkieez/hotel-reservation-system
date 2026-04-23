@@ -22,7 +22,7 @@ public class Receptionist extends Staff {
     // Method to check in a guest
     public void checkInGuest(int roomNumber) {
 
-        for (Reservation reservation : HotelDatabase.reservations) {
+        for (Reservation reservation : HotelDatabase.getReservations()) {
 
             if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
@@ -43,7 +43,7 @@ public class Receptionist extends Staff {
     // Method to check out a guest
     public void checkOutGuest(int roomNumber) throws InvalidDateException, InvalidReservationException {
 
-        for (Reservation reservation : HotelDatabase.reservations) {
+        for (Reservation reservation : HotelDatabase.getReservations()) {
 
             if (reservation.getRoom().getRoomNumber() == roomNumber) {
 
@@ -61,7 +61,7 @@ public class Receptionist extends Staff {
                 reservation.complete();
 
                 // store invoice globally
-                HotelDatabase.invoices.add(invoice);
+                HotelDatabase.getInvoices().add(invoice);
 
                 // IMPORTANT: also link to guest if you have it
                 reservation.getGuest().getInvoices().add(invoice);

@@ -1,23 +1,3 @@
-/*TO-DO :
-- balance methods
-
-
-
-
-
-/////////////////////////////////
-ZAKER :
-
- - instanceof
-
-
-
-
-
- */
-
-
-
 import database.HotelDatabase;
 import enums.Gender;
 import enums.PaymentMethod;
@@ -149,7 +129,7 @@ public class Main {
 
                 Guest found = null;
 
-                for (Guest g : HotelDatabase.guests) {
+                for (Guest g : HotelDatabase.getGuests()) {
                     if (g.getUsername().equals(username)) {
                         found = g;
                         break;
@@ -211,7 +191,7 @@ public class Main {
                     break;
                 }
 
-                for (Receptionist receptionist : HotelDatabase.receptionists) {
+                for (Receptionist receptionist : HotelDatabase.getReceptionists()) {
 
                     if (receptionist.getUsername().equals(username) &&
                             receptionist.getPassword().equals(password)) {
@@ -265,7 +245,7 @@ public class Main {
                     break;
                 }
 
-                for (Admin admin : HotelDatabase.admins) {
+                for (Admin admin : HotelDatabase.getAdmins()) {
 
                     if (admin.getUsername().equals(username) &&
                             admin.getPassword().equals(password)) {
@@ -343,7 +323,7 @@ public class Main {
 
                     boolean found = false;
 
-                    for (Room r : HotelDatabase.rooms) {
+                    for (Room r : HotelDatabase.getRooms()) {
 
                         if (r.isAvailable(checkIn, checkOut)) { // USING YOUR METHOD
 
@@ -377,7 +357,7 @@ public class Main {
 
                     Room selected = null;
 
-                    for (Room r : HotelDatabase.rooms) {
+                    for (Room r : HotelDatabase.getRooms()) {
                         if (r.getRoomNumber() == roomNumber) {
                             selected = r;
                             break;
@@ -604,21 +584,21 @@ public class Main {
                 // CONFIRM
             else if (choice == 4) {
 
-                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
-                    Reservation r = HotelDatabase.reservations.get(i);
+                for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
+                    Reservation r = HotelDatabase.getReservations().get(i);
                     System.out.println((i + 1) + ": " + r.getRoom().getRoomNumber() + " " + r.getStatus());
                 }
 
                 int index;
 
                 try {
-                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                    index = readIntBetween(scanner, 1, HotelDatabase.getReservations().size());
                 } catch (InvalidInputException e) {
                     System.out.println(e.getMessage());
                     continue;
                 }
 
-                Reservation r = HotelDatabase.reservations.get(index - 1);
+                Reservation r = HotelDatabase.getReservations().get(index - 1);
 
                 try {
                     r.confirm();
@@ -635,15 +615,15 @@ public class Main {
             // CHECK-IN (no status change)
             else if (choice == 5) {
 
-                if (HotelDatabase.reservations.isEmpty()) {
+                if (HotelDatabase.getReservations().isEmpty()) {
                     System.out.println("No reservations available");
                     continue;
                 }
 
                 System.out.println("Choose reservation to check-in:");
 
-                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
-                    Reservation r = HotelDatabase.reservations.get(i);
+                for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
+                    Reservation r = HotelDatabase.getReservations().get(i);
 
                     System.out.println((i + 1) + ": " +
                             r.getRoom().getRoomNumber() + " " +
@@ -653,13 +633,13 @@ public class Main {
                 int index;
 
                 try {
-                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                    index = readIntBetween(scanner, 1, HotelDatabase.getReservations().size());
                 } catch (InvalidInputException e) {
                     System.out.println(e.getMessage());
                     continue;
                 }
 
-                Reservation r = HotelDatabase.reservations.get(index - 1);
+                Reservation r = HotelDatabase.getReservations().get(index - 1);
 
                 if (r.getStatus() != ReservationStatus.CONFIRMED) {
                     System.out.println("Not allowed");
@@ -672,16 +652,16 @@ public class Main {
             // CHECK-OUT (FINAL STEP)
             else if (choice == 6) {
 
-                if (HotelDatabase.reservations.isEmpty()) {
+                if (HotelDatabase.getReservations().isEmpty()) {
                     System.out.println("No reservations available");
                     continue;
                 }
 
                 System.out.println("Choose reservation to check-out:");
 
-                for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
+                for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
 
-                    Reservation r = HotelDatabase.reservations.get(i);
+                    Reservation r = HotelDatabase.getReservations().get(i);
 
                     System.out.println((i + 1) + ": Room " + r.getRoom().getRoomNumber()
                             + " | Status: " + r.getStatus()
@@ -691,13 +671,13 @@ public class Main {
                 int index;
 
                 try {
-                    index = readIntBetween(scanner, 1, HotelDatabase.reservations.size());
+                    index = readIntBetween(scanner, 1, HotelDatabase.getReservations().size());
                 } catch (InvalidInputException e) {
                     System.out.println(e.getMessage());
                     continue;
                 }
 
-                Reservation r = HotelDatabase.reservations.get(index - 1);
+                Reservation r = HotelDatabase.getReservations().get(index - 1);
 
                 if (r.getStatus() != ReservationStatus.CONFIRMED) {
                     System.out.println("Cannot check-out (must be CONFIRMED first)");
@@ -709,7 +689,7 @@ public class Main {
                 // /////////////////////CREATING INVOICE/////////////////////
                 Invoice invoice = new Invoice(r, total);
 
-                HotelDatabase.invoices.add(invoice);
+                HotelDatabase.getInvoices().add(invoice);
 
                 // /////////////////////ATTACH TO GUEST/////////////////////
                 r.getGuest().getInvoices().add(invoice);
@@ -721,6 +701,300 @@ public class Main {
             }
 
             else if (choice == 0) return;
+        }
+    }
+
+    // Admin panel
+    public static void adminPanel(Scanner scanner, Admin admin) {
+
+        while (true) {
+
+            System.out.println("\n=== ADMIN PANEL ===");
+            System.out.println("1: View guests");
+            System.out.println("2: View rooms");
+            System.out.println("3: View reservations");
+            System.out.println("4: Manage rooms");
+            System.out.println("5: Manage amenities");
+            System.out.println("6: Manage room types");
+            System.out.println("0: Logout");
+
+            int choice;
+
+            try {
+                choice = readIntBetween(scanner, 0, 6);
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            // ======================
+            // VIEW GUESTS
+            // ======================
+            if (choice == 1) {
+
+                if (HotelDatabase.getGuests().isEmpty()) {
+                    System.out.println("No guests found");
+                    continue;
+                }
+
+                for (Guest g : HotelDatabase.getGuests()) {
+                    System.out.println("Username: " + g.getUsername());
+                }
+            }
+
+            // ======================
+            // VIEW ROOMS (USING ADMIN METHOD)
+            // ======================
+            else if (choice == 2) {
+                admin.viewRoom(); // uses your existing logic ✔
+            }
+
+            // ======================
+            // VIEW RESERVATIONS
+            // ======================
+            else if (choice == 3) {
+
+                if (HotelDatabase.getReservations().isEmpty()) {
+                    System.out.println("No reservations found");
+                    continue;
+                }
+
+                for (Reservation r : HotelDatabase.getReservations()) {
+
+                    System.out.println("Guest: " + r.getGuest().getUsername());
+                    System.out.println("Room: " + r.getRoom().getRoomNumber());
+                    System.out.println("Status: " + r.getStatus());
+                    System.out.println("Check-in: " + r.getCheckIn());
+                    System.out.println("Check-out: " + r.getCheckOut());
+                    System.out.println("----------------");
+                }
+            }
+
+            // ======================
+            // MANAGE ROOMS
+            // ======================
+            else if (choice == 4) {
+
+                System.out.println("\n--- ROOM MANAGEMENT ---");
+                System.out.println("1: Add room");
+                System.out.println("2: Update room price");
+                System.out.println("3: Delete room");
+
+                int subChoice;
+
+                try {
+                    subChoice = readIntBetween(scanner, 1, 3);
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                // ADD ROOM
+                if (subChoice == 1) {
+
+                    try {
+                        System.out.print("Room number: ");
+                        int roomNumber = readIntBetween(scanner, 1, 9999);
+
+                        System.out.println("Choose room type:");
+                        for (int i = 0; i < HotelDatabase.getRoomTypes().size(); i++) {
+                            System.out.println((i + 1) + ": " + HotelDatabase.getRoomTypes().get(i).getName());
+                        }
+
+                        int typeIndex = readIntBetween(scanner, 1, HotelDatabase.getRoomTypes().size());
+
+                        RoomType type = HotelDatabase.getRoomTypes().get(typeIndex - 1);
+
+                        Room newRoom = new Room(roomNumber, type);
+
+                        admin.addRoom(newRoom); // USING YOUR METHOD ✔
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
+                // UPDATE ROOM
+                else if (subChoice == 2) {
+
+                    try {
+                        System.out.print("Room number: ");
+                        int roomNumber = readIntBetween(scanner, 1, 9999);
+
+                        System.out.print("New price: ");
+                        double price = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        admin.updateRoom(roomNumber, price); // USING YOUR METHOD ✔
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
+                // DELETE ROOM
+                else if (subChoice == 3) {
+
+                    try {
+                        System.out.print("Room number: ");
+                        int roomNumber = readIntBetween(scanner, 1, 9999);
+
+                        admin.deleteRoom(roomNumber); // USING YOUR METHOD ✔
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+
+            // ======================
+            // MANAGE AMENITIES
+            // ======================
+            else if (choice == 5) {
+
+                System.out.println("\n--- AMENITY MANAGEMENT ---");
+                System.out.println("1: Add amenity");
+                System.out.println("2: View amenities");
+                System.out.println("3: Update amenity");
+                System.out.println("4: Delete amenity");
+
+                int subChoice;
+
+                try {
+                    subChoice = readIntBetween(scanner, 1, 4);
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                // ADD
+                if (subChoice == 1) {
+                    System.out.print("Amenity name: ");
+                    String name = scanner.nextLine();
+
+                    admin.addAmenity(new Amenity(name)); // ✔
+                }
+
+                // VIEW
+                else if (subChoice == 2) {
+                    admin.viewAmenity(); // ✔
+                }
+
+                // UPDATE
+                else if (subChoice == 3) {
+                    System.out.print("Old name: ");
+                    String oldName = scanner.nextLine();
+
+                    System.out.print("New name: ");
+                    String newName = scanner.nextLine();
+
+                    admin.updateAmenity(oldName, newName); // ✔
+                }
+
+                // DELETE
+                else if (subChoice == 4) {
+
+                    System.out.print("Amenity name to delete: ");
+                    String name = scanner.nextLine();
+
+                    Amenity toDelete = null;
+
+                    for (Amenity a : HotelDatabase.getAmenities()) {
+                        if (a.getName().equalsIgnoreCase(name)) {
+                            toDelete = a;
+                            break;
+                        }
+                    }
+
+                    if (toDelete != null) {
+                        admin.deleteAmenity(toDelete); // ✔
+                    } else {
+                        System.out.println("Amenity not found");
+                    }
+                }
+            }
+
+            // ======================
+            // MANAGE ROOM TYPES
+            // ======================
+            else if (choice == 6) {
+
+                System.out.println("\n--- ROOM TYPE MANAGEMENT ---");
+                System.out.println("1: Add type");
+                System.out.println("2: View types");
+                System.out.println("3: Update type");
+                System.out.println("4: Delete type");
+
+                int subChoice;
+
+                try {
+                    subChoice = readIntBetween(scanner, 1, 4);
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+
+                // ADD
+                if (subChoice == 1) {
+
+                    try {
+                        System.out.print("Type name: ");
+                        String name = scanner.nextLine();
+
+                        System.out.print("Price: ");
+                        double price = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        admin.addRoomType(new RoomType(name, price)); // ✔
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
+                // VIEW
+                else if (subChoice == 2) {
+                    admin.viewRoomTypes(); // ✔
+                }
+
+                // UPDATE
+                else if (subChoice == 3) {
+
+                    System.out.print("Old name: ");
+                    String oldName = scanner.nextLine();
+
+                    System.out.print("New name: ");
+                    String newName = scanner.nextLine();
+
+                    admin.updateRoomType(oldName, newName); // ✔
+                }
+
+                // DELETE
+                else if (subChoice == 4) {
+
+                    System.out.print("Type name to delete: ");
+                    String name = scanner.nextLine();
+
+                    RoomType toDelete = null;
+
+                    for (RoomType t : HotelDatabase.getRoomTypes()) {
+                        if (t.getName().equalsIgnoreCase(name)) {
+                            toDelete = t;
+                            break;
+                        }
+                    }
+
+                    if (toDelete != null) {
+                        admin.deleteRoomType(toDelete); // ✔
+                    } else {
+                        System.out.println("Type not found");
+                    }
+                }
+            }
+
+            else if (choice == 0) {
+                return;
+            }
         }
     }
 
@@ -768,6 +1042,10 @@ public class Main {
             else if (role == 3) {
 
                 Admin admin = adminAuth(scanner);
+
+                if (admin != null) {
+                    adminPanel(scanner, admin); // call panel if authentic
+                }
             }
 
             else {

@@ -80,8 +80,8 @@ public abstract class Staff {
     // Method to view guest information
     public void viewGuest(){
         // code to view guest information
-        for(int i =0; i < HotelDatabase.guests.size(); i++){
-            Guest g = HotelDatabase.guests.get(i);
+        for(int i = 0; i < HotelDatabase.getGuests().size(); i++){
+            Guest g = HotelDatabase.getGuests().get(i);
             System.out.println("Username: " + g.getUsername());
             System.out.println("Balance: " + g.getBalance());
             System.out.println("Address: " + g.getAddress());
@@ -92,8 +92,8 @@ public abstract class Staff {
     // Method to view room information
     public void viewRoom(){
         // code to view room information
-        for (int i = 0; i < HotelDatabase.rooms.size(); i++) {
-            Room r = HotelDatabase.rooms.get(i);
+        for (int i = 0; i < HotelDatabase.getRooms().size(); i++) {
+            Room r = HotelDatabase.getRooms().get(i);
             //getRoomNumber and getRoomType are methods in the Room class that will be implemented when the class is finished
             System.out.println("Room Number: " + r.getRoomNumber());
             System.out.println("Room Type: " + r.getType());
@@ -103,8 +103,8 @@ public abstract class Staff {
     // Method to view booking information
     public void viewBooking(){
         // code to view booking information
-        for (int i = 0; i < HotelDatabase.reservations.size(); i++) {
-            Reservation res = HotelDatabase.reservations.get(i);
+        for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
+            Reservation res = HotelDatabase.getReservations().get(i);
 
             //getGuest, getUsername, getRoom, getRoomNumber, getStatus are all methods in the other classes that will be implemented when the classes are finished
             System.out.println("Guest: " + res.getGuest().getUsername());
