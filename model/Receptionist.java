@@ -12,10 +12,10 @@ public class Receptionist extends Staff {
     public Receptionist(String username, String password, String dateOfBirth, int workingHours) {
         super(username, password, dateOfBirth, workingHours, Role.RECEPTIONIST);
     }
-    // Override the performActions method to provide receptionist-specific functionality
+    // Override the performActions method to provide receptionist functions
     @Override
     public void performActions() {
-        // code to perform receptionist-specific actions
+        // code to perform receptionist actions
         System.out.println("Performing receptionist actions...");
     }
 
@@ -54,7 +54,7 @@ public class Receptionist extends Staff {
 
                 double price = reservation.calculateTotal();
 
-                // create invoice (simple version)
+                // create invoice
                 Invoice invoice = new Invoice(reservation, price);
 
                 // mark reservation completed
@@ -63,7 +63,6 @@ public class Receptionist extends Staff {
                 // store invoice globally
                 HotelDatabase.getInvoices().add(invoice);
 
-                // IMPORTANT: also link to guest if you have it
                 reservation.getGuest().getInvoices().add(invoice);
 
                 System.out.println("Guest checked out successfully");

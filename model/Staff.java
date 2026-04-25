@@ -3,7 +3,7 @@ package model;
 import database.HotelDatabase;
 import enums.Role;
 
-// Staff class that serves as a base class for Admin and Receptionist
+// Staff class that is a parent class for Admin and Receptionist
 public abstract class Staff {
     // Common attributes for all staff members
     private String username;
@@ -94,7 +94,6 @@ public abstract class Staff {
         // code to view room information
         for (int i = 0; i < HotelDatabase.getRooms().size(); i++) {
             Room r = HotelDatabase.getRooms().get(i);
-            //getRoomNumber and getRoomType are methods in the Room class that will be implemented when the class is finished
             System.out.println("Room Number: " + r.getRoomNumber());
             System.out.println("Room Type: " + r.getType());
             System.out.println("----------------");
@@ -105,9 +104,6 @@ public abstract class Staff {
         // code to view booking information
         for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
             Reservation res = HotelDatabase.getReservations().get(i);
-
-            //getGuest, getUsername, getRoom, getRoomNumber, getStatus are all methods in the other classes that will be implemented when the classes are finished
-            System.out.println("Guest: " + res.getGuest().getUsername());
             System.out.println("Room: " + res.getRoom().getRoomNumber());
             System.out.println("Status: " + res.getStatus());
             System.out.println("Check-in: " + res.getCheckIn());
