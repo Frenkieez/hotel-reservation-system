@@ -1,4 +1,8 @@
 package enums;
 
-public class ReservationStatus {
+public enum ReservationStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED,
+    COMPLETED
 }
