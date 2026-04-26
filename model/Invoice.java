@@ -4,6 +4,7 @@ import enums.PaymentMethod;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+// Links this invoice to the reservation it belongs to
 public class Invoice {
 
     private Reservation reservation;
@@ -14,7 +15,7 @@ public class Invoice {
     private LocalDate createdAt;
 
     private PaymentMethod paymentMethod;
-
+    // Stores all payments made
     private ArrayList<String> paymentHistory;
 
     public Invoice(Reservation reservation, double totalAmount) {
@@ -30,7 +31,7 @@ public class Invoice {
         this.paymentHistory = new ArrayList<>();
     }
 
-    // /////////////////////PAY WITH METHOD/////////////////////
+    // Handles payment process
     public void pay(double amount, PaymentMethod method) {
 
         if (amount <= 0) {
@@ -59,12 +60,13 @@ public class Invoice {
         }
     }
 
-    // /////////////////////OVERLOAD (DEFAULT CASH)/////////////////////
+    //Overload the pay method
     public void pay(double amount) {
         pay(amount, PaymentMethod.CASH);
     }
 
-    // /////////////////////PRINT INVOICE/////////////////////
+    //    Displays full invoice details for the guest or
+    //     receptionist (Receipt)
     public void printInvoice() {
 
         System.out.println("\n========== INVOICE ==========");
@@ -93,7 +95,6 @@ public class Invoice {
         System.out.println("=============================\n");
     }
 
-    // getters
     public double getTotalAmount() {
         return totalAmount;
     }
