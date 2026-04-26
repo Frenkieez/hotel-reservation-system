@@ -143,8 +143,25 @@ Can:
 
 ---
 
+## Git Workflow
+
+The project was developed using a structured Git workflow with multiple branches:
+
+- Each team member worked on a separate feature branch (4 branches total, one per member)
+- A shared `dev` branch was used for integration of all features
+- One member was responsible for merging and integrating all branches into `dev`
+- After integration and testing, a clean and stable version was pushed to the `main` branch
+
+This workflow ensures:
+- Parallel development without conflicts
+- Controlled integration of features
+- A stable production-ready `main` branch
+
+This structure also shows proper teamwork and version control practice rather than a single-version development process.
+
+---
+
 ## Notes
 
 - This is not a real database system (no SQL used)
 - Data resets when program restarts
----

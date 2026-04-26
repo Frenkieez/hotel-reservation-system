@@ -36,7 +36,7 @@ public class RoomType {
         this.pricePerNight = pricePerNight;
     }
 
-    public void setName(String name) {                                                                                  // added by 3elba
+    public void setName(String name) {                                                                                  // added by Abdelrahman
         this.name = name;
     }
 
