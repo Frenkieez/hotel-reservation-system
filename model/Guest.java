@@ -24,7 +24,7 @@ public class Guest {
     private List<Reservation> reservations;
     private List<Invoice> invoices = new ArrayList<>();
 
-    // constructors
+    // constructor
     public Guest(String username, String password,
           LocalDate dateOfBirth, double balance,
           String address, Gender gender){
@@ -77,7 +77,7 @@ public class Guest {
     }
 
     public Reservation makeReservation(Room room, LocalDate checkIn, LocalDate checkOut)
-            throws InvalidDateException, InvalidReservationException {
+            throws InvalidDateException, InvalidReservationException { // method to make a new reservation
 
         // validate dates first
         if (checkIn == null || checkOut == null) {
@@ -88,7 +88,7 @@ public class Guest {
             throw new InvalidDateException("Check-out must be after check-in");
         }
 
-        // check availability BEFORE creating reservation
+        // check availability before creating reservation
         if (!room.isAvailable(checkIn, checkOut)) {
             throw new InvalidDateException("Room not available for selected dates");
         }
@@ -108,7 +108,7 @@ public class Guest {
         return res;
     }
 
-    // viewReservations method :
+    // method to view reservations
     public List<Reservation> viewReservations() {
         return reservations;
     }
@@ -121,7 +121,7 @@ public class Guest {
                 break;
             }
         }
-        if (!found) {
+        if (!found) { // if not found
             throw new InvalidReservationException("You have NO access to cancel this reservation");
         }
 
@@ -141,25 +141,25 @@ public class Guest {
 
 
 
-    // invoice part
+    // method to pay invoice
     public void payInvoice(Invoice invoice, double amount) {
 
-        if (!invoices.contains(invoice)) {
+        if (!invoices.contains(invoice)) { // if invoice is not found
             System.out.println("Invoice not found");
             return;
         }
 
-        if (invoice.isPaid()) {
+        if (invoice.isPaid()) { // if it is already paid
             System.out.println("Already paid");
             return;
         }
 
-        if (balance < amount) {
+        if (balance < amount) { // if users has less money than required
             System.out.println("Insufficient balance");
             return;
         }
 
-        balance -= amount;
+        balance -= amount; // update value of balance after payment
         invoice.pay(amount);
 
         System.out.println("Payment successful");

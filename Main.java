@@ -21,7 +21,7 @@ public class Main {
 
     // helper functions
 
-    // function that ensures an integer is input
+    // method that ensures an integer is input
     public static int readIntBetween(Scanner scanner, int min, int max) throws InvalidInputException {
         int value;
 
@@ -41,7 +41,7 @@ public class Main {
     }
 
 
-    public static Guest guestAuth(Scanner scanner) {
+    public static Guest guestAuth(Scanner scanner) { // makes sure guest is an authentic one
 
         while (true) {
 
@@ -59,7 +59,7 @@ public class Main {
                 continue;
             }
 
-            // REGISTER
+            // registering path
             if (choice == 2) {
 
                 System.out.print("Username: ");
@@ -70,7 +70,7 @@ public class Main {
                     System.out.print("Password: ");
                     password = scanner.nextLine();
 
-                    if (password.length() < 6) {
+                    if (password.length() < 6) { // validation for password
                         System.out.println("Password must be at least 6 characters");
                         continue;
                     }
@@ -81,7 +81,7 @@ public class Main {
                 String address = scanner.nextLine();
 
                 Gender gender;
-                while (true) {
+                while (true) { // selecting whether user is a male or female using numbers 1,2
                     System.out.print("1: Male .. 2: Female\nGender: ");
                     try {
                         int genderId = readIntBetween(scanner, 1, 2);
@@ -92,7 +92,7 @@ public class Main {
                     }
                 }
 
-                Guest g = new Guest(
+                Guest g = new Guest( // creating a new guest object
                         username,
                         password,
                         java.time.LocalDate.of(today.getYear(), today.getMonthValue(), today.getDayOfMonth()),
@@ -109,7 +109,7 @@ public class Main {
                 }
             }
 
-            // LOGIN (FIXED)
+            // Logging in path
             else if (choice == 1) {
 
                 System.out.print("Username: ");
@@ -120,7 +120,7 @@ public class Main {
                     System.out.print("Password: ");
                     password = scanner.nextLine();
 
-                    if (password.length() < 6) {
+                    if (password.length() < 6) { // making sure entered password is at least 6 chars
                         System.out.println("Password must be at least 6 characters");
                         continue;
                     }
@@ -137,12 +137,12 @@ public class Main {
                 }
 
                 if (found == null) {
-                    System.out.println("Invalid credentials");
+                    System.out.println("Invalid credentials"); // if guest is not found inside the database
                     continue;
                 }
 
                 try {
-                    found.login(username, password);
+                    found.login(username, password); // logging in when credentials are valid
                     System.out.println("Login success");
                     return found;
                 } catch (Exception e) {
@@ -176,7 +176,7 @@ public class Main {
 
             if (choice == 1) {
 
-                System.out.print("Username: "); // nextline
+                System.out.print("Username: ");
                 String username = scanner.nextLine();
 
                 String password;
@@ -211,7 +211,7 @@ public class Main {
     }
 
 
-    public static Admin adminAuth(Scanner scanner) { // method that makes sure that Admin is authentic (returns a Admin type)
+    public static Admin adminAuth(Scanner scanner) { // method that makes sure that Admin is authentic (returns Admin type)
 
         while (true) {
 
@@ -230,7 +230,7 @@ public class Main {
 
             if (choice == 1) {
 
-                System.out.print("Username: "); // CHANGED: FIXED next()/nextLine bug
+                System.out.print("Username: ");
                 String username = scanner.nextLine();
 
                 String password;
@@ -266,7 +266,7 @@ public class Main {
 
 
     // Panels
-    public static void guestPanel(Scanner scanner, Guest guest) throws InvalidInputException {
+    public static void guestPanel(Scanner scanner, Guest guest) throws InvalidInputException { // guest panel which is only executed after guestAuth()
 
         while (true) {
 
@@ -288,13 +288,11 @@ public class Main {
                 continue;
             }
 
-            // ======================
-            // VIEW AVAILABLE ROOMS (USING isAvailable)
-            // ======================
+            // View available rooms path
             if (choice == 1) {
 
                 try {
-
+                    // taking checking in and out details
                     System.out.print("Enter check-in day: ");
                     int inDay = readIntBetween(scanner, 1, 31);
 
@@ -316,7 +314,7 @@ public class Main {
                     LocalDate checkIn = LocalDate.of(inYear, inMonth, inDay);
                     LocalDate checkOut = LocalDate.of(outYear, outMonth, outDay);
 
-                    if (!checkOut.isAfter(checkIn)) {
+                    if (!checkOut.isAfter(checkIn)) { // making sure we have valid date range
                         System.out.println("Invalid date range");
                         continue;
                     }
@@ -325,7 +323,7 @@ public class Main {
 
                     for (Room r : HotelDatabase.getRooms()) {
 
-                        if (r.isAvailable(checkIn, checkOut)) { // USING YOUR METHOD
+                        if (r.isAvailable(checkIn, checkOut)) { // when room is available its details are printed
 
                             System.out.println("Room: " + r.getRoomNumber());
                             System.out.println("Type: " + r.getType().getName());
@@ -336,7 +334,7 @@ public class Main {
                         }
                     }
 
-                    if (!found) {
+                    if (!found) { // when not found
                         System.out.println("No rooms available for these dates");
                     }
 
@@ -345,15 +343,13 @@ public class Main {
                 }
             }
 
-            // ======================
-            // MAKE RESERVATION (USING Guest + Reservation LOGIC)
-            // ======================
+            // Making a reservation path
             else if (choice == 2) {
 
                 try {
 
                     System.out.print("Room number: ");
-                    int roomNumber = readIntBetween(scanner, 1, 9999);
+                    int roomNumber = readIntBetween(scanner, 1, 9999); // an example of rooms range from 1 -> 9999
 
                     Room selected = null;
 
@@ -364,11 +360,11 @@ public class Main {
                         }
                     }
 
-                    if (selected == null) {
+                    if (selected == null) { // if room is not found
                         System.out.println("Room not found");
                         continue;
                     }
-
+                    // taking room details from user
                     System.out.print("Enter check-in day: ");
                     int inDay = readIntBetween(scanner, 1, 31);
 
@@ -390,10 +386,10 @@ public class Main {
                     LocalDate checkIn = LocalDate.of(inYear, inMonth, inDay);
                     LocalDate checkOut = LocalDate.of(outYear, outMonth, outDay);
 
-                    // USE model validation too
-                    Reservation res = guest.makeReservation(selected, checkIn, checkOut); // USING YOUR METHOD
+                    // making a new reservation using the given data
+                    Reservation res = guest.makeReservation(selected, checkIn, checkOut);
 
-                    double total = res.calculateTotal(); // USING YOUR METHOD
+                    double total = res.calculateTotal();
 
                     System.out.println("Reservation created successfully");
                     System.out.println("Status: " + res.getStatus());
@@ -403,16 +399,14 @@ public class Main {
                 }
             }
 
-            // ======================
-            // VIEW RESERVATIONS (USING guest.viewReservations)
-            // ======================
+            // Viewing reservations path
             else if (choice == 3) {
 
-                if (guest.viewReservations().isEmpty()) {
+                if (guest.viewReservations().isEmpty()) { // when not created any reservations yet
                     System.out.println("You did not make any reservations");
                 } else {
 
-                    for (Reservation r : guest.viewReservations()) {
+                    for (Reservation r : guest.viewReservations()) { // printing room details
 
                         System.out.println("Room: " + r.getRoom().getRoomNumber());
                         System.out.println("Status: " + r.getStatus());
@@ -420,7 +414,7 @@ public class Main {
                         System.out.println("Check-out: " + r.getCheckOut());
 
                         try {
-                            System.out.println("Total: " + r.calculateTotal()); // USING YOUR METHOD
+                            System.out.println("Total: " + r.calculateTotal()); // printing total
                         } catch (Exception e) {
                             System.out.println("Error calculating total");
                         }
@@ -430,19 +424,17 @@ public class Main {
                 }
             }
 
-            // ======================
-            // CANCEL RESERVATION (CHOICE-BASED)
-            // ======================
+            // Cancelling a reservation path
             else if (choice == 4) {
 
                 try {
 
-                    if (guest.viewReservations().isEmpty()) {
+                    if (guest.viewReservations().isEmpty()) { // when not created any reservations yet
                         System.out.println("No reservations to cancel");
                         continue;
                     }
 
-                    // show reservations with index
+                    // showing reservations with index
                     System.out.println("\nYour Reservations:");
 
                     for (int i = 0; i < guest.viewReservations().size(); i++) {
@@ -455,14 +447,14 @@ public class Main {
                         System.out.println("Check-out: " + r.getCheckOut());
                         System.out.println("----------------");
                     }
-
+                    // user chooses number of reservation to be canceled
                     System.out.print("Choose reservation number to cancel: ");
                     int index = readIntBetween(scanner, 1, guest.viewReservations().size());
 
                     Reservation selected = guest.viewReservations().get(index - 1);
 
-                    guest.cancelReservation(selected); // your validation method
-                    selected.cancel(); // state change
+                    guest.cancelReservation(selected); // cancel the reservation
+                    selected.cancel(); // change the state to canceled
 
                     System.out.println("Reservation cancelled");
 
@@ -471,9 +463,10 @@ public class Main {
                 }
             }
 
+            // Invoice viewing path
             else if (choice == 5) {
 
-                if (guest.getInvoices().isEmpty()) {
+                if (guest.getInvoices().isEmpty()) { // when not having any invoices yet
                     System.out.println("No invoices found");
                     continue;
                 }
@@ -481,7 +474,7 @@ public class Main {
                 for (int i = 0; i < guest.getInvoices().size(); i++) {
 
                     Invoice inv = guest.getInvoices().get(i);
-
+                    // printing details of invoice
                     System.out.println((i + 1) + ": Room " + inv.getReservation().getRoom().getRoomNumber());
                     System.out.println("   Total: " + inv.getTotalAmount());
                     System.out.println("   Paid: " + inv.getPaidAmount());
@@ -490,9 +483,10 @@ public class Main {
                 }
             }
 
+            // Invoice paying path
             else if (choice == 6) {
 
-                if (guest.getInvoices().isEmpty()) {
+                if (guest.getInvoices().isEmpty()) { // when not having any invoices to pay yet
                     System.out.println("No invoices to pay");
                     continue;
                 }
@@ -507,10 +501,10 @@ public class Main {
                             " | Remaining: " +
                             (inv.getTotalAmount() - inv.getPaidAmount()) +
                             " | Status: " +
-                            (inv.isPaid() ? "PAID" : "PENDING"));
+                            (inv.isPaid() ? "PAID" : "PENDING")); // if isPaid prints PAID else PENDING
                 }
 
-                System.out.print("Choose invoice: ");
+                System.out.print("Choose invoice: "); // choosing invoice to pay using index
                 int index = readIntBetween(scanner, 1, guest.getInvoices().size());
 
                 Invoice selected = guest.getInvoices().get(index - 1);
@@ -541,15 +535,14 @@ public class Main {
                 System.out.println("Payment processed successfully");
             }
 
-            // ======================
-            // LOGOUT
-            // ======================
+            // Logout
             else if (choice == 0) {
                 return;
             }
         }
     }
 
+    // receptionist panel which is only executed after receptionistAuth()
     public static void receptionistPanel(Scanner scanner, Receptionist receptionist) throws InvalidInputException, InvalidDateException, InvalidReservationException {
 
         while (true) {
@@ -572,16 +565,16 @@ public class Main {
                 continue;
             }
 
-            // VIEW GUESTS
+            // View guests
             if (choice == 1) receptionist.viewGuest();
 
-                // VIEW ROOMS
+                // View rooms
             else if (choice == 2) receptionist.viewRoom();
 
-                // VIEW RESERVATIONS
+                // View reservations
             else if (choice == 3) receptionist.viewBooking();
 
-                // CONFIRM
+                // Confirming path
             else if (choice == 4) {
 
                 for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
@@ -612,7 +605,7 @@ public class Main {
                 }
             }
 
-            // CHECK-IN (no status change)
+            // Check-in path
             else if (choice == 5) {
 
                 if (HotelDatabase.getReservations().isEmpty()) {
@@ -649,10 +642,10 @@ public class Main {
                 System.out.println("Checked-in successfully");
             }
 
-            // CHECK-OUT (FINAL STEP)
+            // Check-out path
             else if (choice == 6) {
 
-                if (HotelDatabase.getReservations().isEmpty()) {
+                if (HotelDatabase.getReservations().isEmpty()) { // when not created any reservations yet
                     System.out.println("No reservations available");
                     continue;
                 }
@@ -662,7 +655,7 @@ public class Main {
                 for (int i = 0; i < HotelDatabase.getReservations().size(); i++) {
 
                     Reservation r = HotelDatabase.getReservations().get(i);
-
+                    // printing checkout details
                     System.out.println((i + 1) + ": Room " + r.getRoom().getRoomNumber()
                             + " | Status: " + r.getStatus()
                             + " | Guest: " + r.getGuest().getUsername());
@@ -679,33 +672,33 @@ public class Main {
 
                 Reservation r = HotelDatabase.getReservations().get(index - 1);
 
-                if (r.getStatus() != ReservationStatus.CONFIRMED) {
+                if (r.getStatus() != ReservationStatus.CONFIRMED) { // the reservation must be confirmed first in order to check-out
                     System.out.println("Cannot check-out (must be CONFIRMED first)");
                     continue;
                 }
 
                 double total = r.calculateTotal();
 
-                // /////////////////////CREATING INVOICE/////////////////////
+                // creating a new invoice
                 Invoice invoice = new Invoice(r, total);
 
                 HotelDatabase.getInvoices().add(invoice);
 
-                // /////////////////////ATTACH TO GUEST/////////////////////
+                // attaching this invoice to that guest
                 r.getGuest().getInvoices().add(invoice);
 
                 r.complete();
 
                 System.out.println("Check-out completed");
-                System.out.println("Invoice generated for amount: " + total);
+                System.out.println("Invoice generated for amount: " + total); // tells the user how much to pay (of course this also will be printed in the invoice itself)
             }
 
-            else if (choice == 0) return;
+            else if (choice == 0) return; // if zero -> return back
         }
     }
 
     // Admin panel
-    public static void adminPanel(Scanner scanner, Admin admin) {
+    public static void adminPanel(Scanner scanner, Admin admin) {  // Admin panel which is only executed after adminAuth()
 
         while (true) {
 
@@ -727,12 +720,10 @@ public class Main {
                 continue;
             }
 
-            // ======================
-            // VIEW GUESTS
-            // ======================
+            // Viewing guests path
             if (choice == 1) {
 
-                if (HotelDatabase.getGuests().isEmpty()) {
+                if (HotelDatabase.getGuests().isEmpty()) { // if there are no guests yet
                     System.out.println("No guests found");
                     continue;
                 }
@@ -742,25 +733,21 @@ public class Main {
                 }
             }
 
-            // ======================
-            // VIEW ROOMS (USING ADMIN METHOD)
-            // ======================
+            // Viewing rooms path
             else if (choice == 2) {
-                admin.viewRoom(); // uses your existing logic ✔
+                admin.viewRoom();
             }
 
-            // ======================
-            // VIEW RESERVATIONS
-            // ======================
+            // Viewing reservations path
             else if (choice == 3) {
 
-                if (HotelDatabase.getReservations().isEmpty()) {
+                if (HotelDatabase.getReservations().isEmpty()) { // if no reservations yet
                     System.out.println("No reservations found");
                     continue;
                 }
 
                 for (Reservation r : HotelDatabase.getReservations()) {
-
+                    // printing reservations details
                     System.out.println("Guest: " + r.getGuest().getUsername());
                     System.out.println("Room: " + r.getRoom().getRoomNumber());
                     System.out.println("Status: " + r.getStatus());
@@ -770,9 +757,7 @@ public class Main {
                 }
             }
 
-            // ======================
-            // MANAGE ROOMS
-            // ======================
+            // Managing rooms path
             else if (choice == 4) {
 
                 System.out.println("\n--- ROOM MANAGEMENT ---");
@@ -789,7 +774,7 @@ public class Main {
                     continue;
                 }
 
-                // ADD ROOM
+                // Adding a room
                 if (subChoice == 1) {
 
                     try {
@@ -807,14 +792,14 @@ public class Main {
 
                         Room newRoom = new Room(roomNumber, type);
 
-                        admin.addRoom(newRoom); // USING YOUR METHOD ✔
+                        admin.addRoom(newRoom); // room added
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 }
 
-                // UPDATE ROOM
+                // Updating a room
                 else if (subChoice == 2) {
 
                     try {
@@ -825,21 +810,21 @@ public class Main {
                         double price = scanner.nextDouble();
                         scanner.nextLine();
 
-                        admin.updateRoom(roomNumber, price); // USING YOUR METHOD ✔
+                        admin.updateRoom(roomNumber, price); // room updated
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 }
 
-                // DELETE ROOM
+                // Deleting a room
                 else if (subChoice == 3) {
 
                     try {
                         System.out.print("Room number: ");
                         int roomNumber = readIntBetween(scanner, 1, 9999);
 
-                        admin.deleteRoom(roomNumber); // USING YOUR METHOD ✔
+                        admin.deleteRoom(roomNumber); // room deleted
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -847,9 +832,7 @@ public class Main {
                 }
             }
 
-            // ======================
-            // MANAGE AMENITIES
-            // ======================
+            // Managing amenities path
             else if (choice == 5) {
 
                 System.out.println("\n--- AMENITY MANAGEMENT ---");
@@ -867,20 +850,20 @@ public class Main {
                     continue;
                 }
 
-                // ADD
+                // Adding amenity
                 if (subChoice == 1) {
                     System.out.print("Amenity name: ");
                     String name = scanner.nextLine();
 
-                    admin.addAmenity(new Amenity(name)); // ✔
+                    admin.addAmenity(new Amenity(name));
                 }
 
-                // VIEW
+                // Viewing amenity
                 else if (subChoice == 2) {
-                    admin.viewAmenity(); // ✔
+                    admin.viewAmenity();
                 }
 
-                // UPDATE
+                // Updating amenity
                 else if (subChoice == 3) {
                     System.out.print("Old name: ");
                     String oldName = scanner.nextLine();
@@ -888,10 +871,10 @@ public class Main {
                     System.out.print("New name: ");
                     String newName = scanner.nextLine();
 
-                    admin.updateAmenity(oldName, newName); // ✔
+                    admin.updateAmenity(oldName, newName);
                 }
 
-                // DELETE
+                // Deleting amenity
                 else if (subChoice == 4) {
 
                     System.out.print("Amenity name to delete: ");
@@ -907,16 +890,14 @@ public class Main {
                     }
 
                     if (toDelete != null) {
-                        admin.deleteAmenity(toDelete); // ✔
+                        admin.deleteAmenity(toDelete);
                     } else {
                         System.out.println("Amenity not found");
                     }
                 }
             }
 
-            // ======================
-            // MANAGE ROOM TYPES
-            // ======================
+            // Managing room types path
             else if (choice == 6) {
 
                 System.out.println("\n--- ROOM TYPE MANAGEMENT ---");
@@ -934,7 +915,7 @@ public class Main {
                     continue;
                 }
 
-                // ADD
+                // Adding room type
                 if (subChoice == 1) {
 
                     try {
@@ -945,19 +926,19 @@ public class Main {
                         double price = scanner.nextDouble();
                         scanner.nextLine();
 
-                        admin.addRoomType(new RoomType(name, price)); // ✔
+                        admin.addRoomType(new RoomType(name, price));
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 }
 
-                // VIEW
+                // Viewing room type
                 else if (subChoice == 2) {
-                    admin.viewRoomTypes(); // ✔
+                    admin.viewRoomTypes();
                 }
 
-                // UPDATE
+                // Updating room type
                 else if (subChoice == 3) {
 
                     System.out.print("Old name: ");
@@ -966,10 +947,10 @@ public class Main {
                     System.out.print("New name: ");
                     String newName = scanner.nextLine();
 
-                    admin.updateRoomType(oldName, newName); // ✔
+                    admin.updateRoomType(oldName, newName);
                 }
 
-                // DELETE
+                // Delete room type
                 else if (subChoice == 4) {
 
                     System.out.print("Type name to delete: ");
@@ -985,7 +966,7 @@ public class Main {
                     }
 
                     if (toDelete != null) {
-                        admin.deleteRoomType(toDelete); // ✔
+                        admin.deleteRoomType(toDelete);
                     } else {
                         System.out.println("Type not found");
                     }
@@ -1027,7 +1008,7 @@ public class Main {
 
                 Guest guest = guestAuth(scanner);
                 if (guest != null) {
-                    guestPanel(scanner, guest);
+                    guestPanel(scanner, guest); // call panel if authentic
                 }
             }
 
@@ -1035,7 +1016,7 @@ public class Main {
 
                 Receptionist receptionist = receptionistAuth(scanner);
                 if (receptionist != null) {
-                    receptionistPanel(scanner, receptionist);
+                    receptionistPanel(scanner, receptionist); // call panel if authentic
                 }
             }
 
@@ -1053,5 +1034,6 @@ public class Main {
                 break;
             }
         }
+        scanner.close();
     }
 }

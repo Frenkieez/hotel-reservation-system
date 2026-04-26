@@ -49,15 +49,15 @@ public class Reservation {
 
     // some new guard methods (lets us see whether method can have access to change status or not)
     public boolean canConfirm() {
-        return status == ReservationStatus.PENDING;
+        return status == ReservationStatus.PENDING; // only a pending reservation can be confirmed
     }
 
     public boolean canCancel() {
-        return status == ReservationStatus.PENDING || status == ReservationStatus.CONFIRMED;
+        return status == ReservationStatus.PENDING || status == ReservationStatus.CONFIRMED; // only a pending or confirmed reservation can be canceled
     }
 
     public boolean canComplete() {
-        return status == ReservationStatus.CONFIRMED;
+        return status == ReservationStatus.CONFIRMED; // only a confirmed reservation can be completed
     }
 
 
