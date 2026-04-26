@@ -1,5 +1,3 @@
-// member2's version
-
 package model;
 import database.HotelDatabase;
 import enums.ReservationStatus;
@@ -30,7 +28,7 @@ public class Room {
                     (r.getStatus() == ReservationStatus.CONFIRMED ||
                             r.getStatus() == ReservationStatus.PENDING)){
                 // checking if there is overlapping in availability
-                // if NOT [new_checkOut is before current checkIn OR new_checkIn is after current checkOut] (not correct way of reservation)
+                // if NOT [new_checkOut is before current checkIn OR new_checkIn is after current checkOut] (if not correct way of reservation)
                 if (! (newOut.isBefore(r.getCheckIn()) || newIn.isAfter(r.getCheckOut())) ){
                     return false;
                 }

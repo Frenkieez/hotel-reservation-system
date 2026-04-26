@@ -1,5 +1,3 @@
-// member2's version
-
 package model;
 
 import exceptions.InvalidPriceException;
