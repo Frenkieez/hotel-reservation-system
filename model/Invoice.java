@@ -14,6 +14,8 @@ public class Invoice {
     private boolean paid;
     private LocalDate createdAt;
 
+    private LocalDate paidAt;
+
     private PaymentMethod paymentMethod;
     // Stores all payments made
     private ArrayList<String> paymentHistory;
@@ -32,7 +34,7 @@ public class Invoice {
     }
 
     // Handles payment process
-    public void pay(double amount, PaymentMethod method) {
+    public void pay(double amount, PaymentMethod method, String email, String password) {
 
         if (amount <= 0) {
             System.out.println("Invalid payment amount");
@@ -44,15 +46,49 @@ public class Invoice {
             return;
         }
 
+        // ONLINE PAYMENT VALIDATION
+        if (method == PaymentMethod.ONLINE) {
+
+            if (email == null) {
+                System.out.println("Invalid email");
+                return;
+            }
+
+            if (email.length() < 8) {
+                System.out.println("Invalid email");
+                return;
+            }
+
+            boolean hasAt = false;
+
+            for (int i = 0; i < email.length(); i++) {
+                if (email.charAt(i) == '@') {
+                    hasAt = true;
+                    break;
+                }
+            }
+
+            if (!hasAt) {
+                System.out.println("Invalid email");
+                return;
+            }
+
+            if (password == null || password.length() < 6) {
+                System.out.println("Password must be at least 6 characters");
+                return;
+            }
+        }
+
         this.paymentMethod = method;
 
-        paidAmount += amount;
+        paidAmount = paidAmount + amount;
 
         paymentHistory.add(method + " -> " + amount);
 
         if (paidAmount >= totalAmount) {
             paidAmount = totalAmount;
             paid = true;
+            paidAt = LocalDate.now();
             System.out.println("Invoice fully paid using " + method);
         } else {
             System.out.println("Partial payment done using " + method);
@@ -62,7 +98,11 @@ public class Invoice {
 
     //Overload the pay method
     public void pay(double amount) {
-        pay(amount, PaymentMethod.CASH);
+        pay(amount, PaymentMethod.CASH, null, null);
+    }
+
+    public void pay(double amount, PaymentMethod method) {
+        pay(amount, method, null, null);
     }
 
     //    Displays full invoice details for the guest or
@@ -79,13 +119,26 @@ public class Invoice {
 
         System.out.println("Created At: " + createdAt);
 
+        if (paidAt == null) {
+            System.out.println("Paid At: NOT PAID YET");
+        } else {
+            System.out.println("Paid At: " + paidAt);
+        }
+
         System.out.println("Total: " + totalAmount);
         System.out.println("Paid: " + paidAmount);
 
-        System.out.println("Status: " + (paid ? "PAID" : "PENDING"));
+        if (paid == true) {
+            System.out.println("Status: PAID");
+        } else {
+            System.out.println("Status: PENDING");
+        }
 
-        System.out.println("Payment Method: " +
-                (paymentMethod == null ? "NOT SET" : paymentMethod));
+        if (paymentMethod == null) {
+            System.out.println("Payment Method: NOT SET");
+        } else {
+            System.out.println("Payment Method: " + paymentMethod);
+        }
 
         System.out.println("\nHistory:");
         for (String log : paymentHistory) {
