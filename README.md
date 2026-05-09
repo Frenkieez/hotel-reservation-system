@@ -164,5 +164,5 @@ Link of github repo : https://github.com/Frenkieez/hotel-reservation-system
 
 ## Notes
 
-- This is not a real database system (no SQL used)
-- Data resets when program restarts
+- This is not a real database system (no SQL used).
+- Data resets when program restarts.
