@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="model.StaffDashboardController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header">
+            <Label fx:id="staffLabel" text="Staff Dashboard" styleClass="title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Logout" onAction="#logout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane>
+
+            <Tab text="View / Receptionist Actions" closable="false">
+                <VBox spacing="12" styleClass="card">
+                    <Label text="Guests, Rooms, and Reservations" styleClass="section-title"/>
+
+                    <HBox spacing="10">
+                        <Button text="View Guests" onAction="#viewGuests"/>
+                        <Button text="View Rooms" onAction="#viewRooms"/>
+                        <Button text="Refresh Reservations" onAction="#refreshReservations"/>
+                    </HBox>
+
+                    <TextArea fx:id="staffOutput" prefHeight="230" editable="false"/>
+
+                    <Label text="Reservations" styleClass="section-title"/>
+                    <ListView fx:id="reservationList" prefHeight="260"/>
+
+                    <HBox spacing="10">
+                        <Button text="Confirm Reservation" onAction="#confirmReservation" styleClass="primary-button"/>
+                        <Button text="Check-in Guest" onAction="#checkInGuest"/>
+                        <Button text="Check-out Guest" onAction="#checkOutGuest" styleClass="primary-button"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <Tab fx:id="adminTab" text="Admin Management" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="14" styleClass="card">
+
+                        <Label text="Admin CRUD Management" styleClass="section-title"/>
+
+                        <TitledPane text="Rooms" expanded="false">
+                            <VBox spacing="10">
+                                <HBox spacing="10">
+                                    <TextField fx:id="roomNumberField" promptText="Room number"/>
+                                    <ComboBox fx:id="roomTypeBox" prefWidth="160"/>
+                                    <TextField fx:id="roomPriceField" promptText="New price"/>
+                                </HBox>
+
+                                <HBox spacing="10">
+                                    <Button text="Add Room" onAction="#addRoom"/>
+                                    <Button text="Update Room Price" onAction="#updateRoomPrice"/>
+                                    <Button text="Delete Room" onAction="#deleteRoom" styleClass="danger-button"/>
+                                </HBox>
+                            </VBox>
+                        </TitledPane>
+
+                        <TitledPane text="Amenities CRUD" expanded="true">
+                            <VBox spacing="12">
+
+                                <Label text="Create Amenity"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="amenityNameField" promptText="Amenity name"/>
+                                    <Button text="Add Amenity" onAction="#addAmenity" styleClass="primary-button"/>
+                                </HBox>
+
+                                <Label text="Read Amenities"/>
+                                <HBox spacing="10">
+                                    <Button text="View Amenities" onAction="#viewAmenities"/>
+                                </HBox>
+
+                                <TextArea fx:id="amenityOutput"
+                                          prefHeight="120"
+                                          editable="false"
+                                          promptText="Amenities will appear here..."/>
+
+                                <Label text="Update Amenity"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="amenityOldNameField" promptText="Old amenity name"/>
+                                    <TextField fx:id="amenityNewNameField" promptText="New amenity name"/>
+                                    <Button text="Update Amenity" onAction="#updateAmenity"/>
+                                </HBox>
+
+                                <Label text="Delete Amenity"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="amenityDeleteNameField" promptText="Amenity name to delete"/>
+                                    <Button text="Delete Amenity" onAction="#deleteAmenity" styleClass="danger-button"/>
+                                </HBox>
+
+                            </VBox>
+                        </TitledPane>
+
+                        <TitledPane text="Room Types CRUD" expanded="true">
+                            <VBox spacing="12">
+
+                                <Label text="Create Room Type"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="roomTypeNameField" promptText="Room type name"/>
+                                    <TextField fx:id="roomTypePriceField" promptText="Price per night"/>
+                                    <Button text="Add Room Type" onAction="#addRoomType" styleClass="primary-button"/>
+                                </HBox>
+
+                                <Label text="Read Room Types"/>
+                                <HBox spacing="10">
+                                    <Button text="View Room Types" onAction="#viewRoomTypes"/>
+                                </HBox>
+
+                                <TextArea fx:id="roomTypeOutput"
+                                          prefHeight="120"
+                                          editable="false"
+                                          promptText="Room types will appear here..."/>
+
+                                <Label text="Update Room Type"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="roomTypeOldNameField" promptText="Old room type name"/>
+                                    <TextField fx:id="roomTypeNewNameField" promptText="New room type name"/>
+                                    <Button text="Update Room Type" onAction="#updateRoomType"/>
+                                </HBox>
+
+                                <Label text="Delete Room Type"/>
+                                <HBox spacing="10">
+                                    <TextField fx:id="roomTypeDeleteNameField" promptText="Room type name to delete"/>
+                                    <Button text="Delete Room Type" onAction="#deleteRoomType" styleClass="danger-button"/>
+                                </HBox>
+
+                            </VBox>
+                        </TitledPane>
+
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

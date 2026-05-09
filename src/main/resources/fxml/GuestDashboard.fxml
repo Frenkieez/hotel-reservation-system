@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="model.GuestDashboardController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header">
+            <Label fx:id="welcomeLabel" text="Welcome" styleClass="title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Logout" onAction="#logout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane>
+
+            <Tab text="Profile" closable="false">
+                <VBox spacing="15" styleClass="card">
+                    <Label text="Guest Profile" styleClass="section-title"/>
+                    <Label fx:id="profileLabel"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Room Browsing" closable="false">
+                <VBox spacing="12" styleClass="card">
+                    <Label text="Browse Available Rooms" styleClass="section-title"/>
+
+                    <HBox spacing="10">
+                        <DatePicker fx:id="checkInPicker" promptText="Check-in"/>
+                        <DatePicker fx:id="checkOutPicker" promptText="Check-out"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <ComboBox fx:id="roomTypeFilterBox" prefWidth="180" promptText="Room Type"/>
+                        <TextField fx:id="maxPriceField" promptText="Maximum Price" prefWidth="160"/>
+                        <ComboBox fx:id="amenityFilterBox" prefWidth="180" promptText="Amenity"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <Button text="Apply Filters" onAction="#refreshRooms" styleClass="primary-button"/>
+                        <Button text="Reset Filters" onAction="#resetFilters"/>
+                        <Button text="Make Reservation" onAction="#makeReservation" styleClass="primary-button"/>
+                    </HBox>
+
+                    <ListView fx:id="roomsList" prefHeight="420"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Reservations" closable="false">
+                <VBox spacing="12" styleClass="card">
+                    <Label text="My Reservations" styleClass="section-title"/>
+
+                    <HBox spacing="10">
+                        <Button text="Refresh" onAction="#refreshReservations"/>
+                        <Button text="Cancel Selected" onAction="#cancelReservation" styleClass="danger-button"/>
+                    </HBox>
+
+                    <ListView fx:id="reservationsList" prefHeight="450"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Checkout / Payment" closable="false">
+                <VBox spacing="12" styleClass="card">
+                    <Label text="Invoices and Payment" styleClass="section-title"/>
+
+                    <Button text="Refresh Invoices" onAction="#refreshInvoices"/>
+                    <ListView fx:id="invoicesList" prefHeight="270"/>
+
+                    <HBox spacing="10">
+                        <TextField fx:id="paymentAmountField" promptText="Amount"/>
+                        <ComboBox fx:id="paymentMethodBox" prefWidth="130"/>
+                    </HBox>
+
+                    <HBox spacing="10">
+                        <TextField fx:id="paymentEmailField" promptText="Email for online/card payment"/>
+                        <PasswordField fx:id="paymentPasswordField" promptText="Password"/>
+                    </HBox>
+
+                    <Button text="Pay Selected Invoice" onAction="#payInvoice" styleClass="primary-button"/>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+</BorderPane>

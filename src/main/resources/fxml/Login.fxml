@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="model.LoginController"
+            styleClass="root-pane">
+
+    <top>
+        <VBox alignment="CENTER" spacing="5" styleClass="header">
+            <Label text="Hotel Reservation System" styleClass="title"/>
+            <Label text="Login or register to continue" styleClass="subtitle"/>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox alignment="CENTER" spacing="35">
+
+            <VBox spacing="12" styleClass="card">
+                <Label text="Login" styleClass="section-title"/>
+
+                <Label text="Role"/>
+                <ComboBox fx:id="roleBox" prefWidth="260"/>
+
+                <Label text="Username"/>
+                <TextField fx:id="usernameField" promptText="Enter username"/>
+
+                <Label text="Password"/>
+                <PasswordField fx:id="passwordField" promptText="Enter password"/>
+
+                <Button text="Login" onAction="#login" styleClass="primary-button"/>
+            </VBox>
+
+            <VBox spacing="12" styleClass="card">
+                <Label text="New Guest Registration" styleClass="section-title"/>
+
+                <Label text="Username"/>
+                <TextField fx:id="regUsernameField" promptText="New username"/>
+
+                <Label text="Password"/>
+                <PasswordField fx:id="regPasswordField" promptText="At least 6 characters"/>
+
+                <Label text="Address"/>
+                <TextField fx:id="regAddressField" promptText="Address"/>
+
+                <Label text="Gender"/>
+                <ComboBox fx:id="regGenderBox" prefWidth="260"/>
+
+                <Button text="Register" onAction="#registerGuest" styleClass="primary-button"/>
+            </VBox>
+
+        </HBox>
+    </center>
+</BorderPane>
